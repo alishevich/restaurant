@@ -1,8 +1,9 @@
 package org.example.web;
 
+import org.example.service.RestaurantService;
+import org.springframework.stereotype.Controller;
 
-import org.example.repository.RestaurantRepository;
-
+@Controller
 public class RestaurantController {
-    private RestaurantRepository restaurantRepository;
+    private RestaurantService service;
 }

@@ -1,7 +1,17 @@
 package org.example.model;
 
-public class AbstractBaseEntity {
+import org.example.HasId;
+
+import javax.persistence.*;
+
+@MappedSuperclass
+public class AbstractBaseEntity implements HasId {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
+
+    public AbstractBaseEntity() {}
 
     protected AbstractBaseEntity(Integer id) {
         this.id = id;

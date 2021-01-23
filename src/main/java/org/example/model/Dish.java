@@ -1,7 +1,23 @@
 package org.example.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "dish")
 public class Dish extends AbstractNamedEntity {
+
+    @Column(name = "amount", nullable = false)
     private Integer amount;
+
+     @ManyToOne(fetch = FetchType.LAZY)
+     @JoinColumn(name = "menu_id", nullable = false)
+     @OnDelete(action = OnDeleteAction.CASCADE)
+     private Menu menu;
+
+    public Dish(){}
 
     public Dish(Integer id, String name, Integer amount) {
         super(id, name);
@@ -14,6 +30,10 @@ public class Dish extends AbstractNamedEntity {
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 
     @Override

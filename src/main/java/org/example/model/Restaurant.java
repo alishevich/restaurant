@@ -1,15 +1,30 @@
 package org.example.model;
 
-public class Restaurant extends AbstractNamedEntity {
-    private String address;
-    private String phone;
-    private Integer countVotes;
+import javax.persistence.*;
+import java.util.List;
 
-    public Restaurant(Integer id, String name, String address, String phone, Integer countVotes) {
+@Entity
+@Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "address"}, name = "name_address_idx")})
+public class Restaurant extends AbstractNamedEntity {
+    @Column(name = "address", nullable = false)
+    private String address;
+
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    private List<Menu> menus;
+
+    public Restaurant() {}
+
+    public Restaurant(Restaurant r) {
+        this(r.getId(), r.getName(), r.getAddress(), r.getPhone());
+    }
+
+    public Restaurant(Integer id, String name, String address, String phone) {
         super(id, name);
         this.address = address;
         this.phone = phone;
-        this.countVotes = countVotes;
     }
 
     public String getAddress() {
@@ -28,14 +43,6 @@ public class Restaurant extends AbstractNamedEntity {
         this.phone = phone;
     }
 
-    public Integer getCountVotes() {
-        return countVotes;
-    }
-
-    public void setCountVotes(Integer countVotes) {
-        this.countVotes = countVotes;
-    }
-
     @Override
     public String toString() {
         return "Restaurant{" +
@@ -43,7 +50,6 @@ public class Restaurant extends AbstractNamedEntity {
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
-                ", countVotes=" + countVotes +
                 '}';
     }
 }

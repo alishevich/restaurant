@@ -1,61 +1,65 @@
 package org.example.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"}, name = "vote_unique_users_date_idx")})
 public class Vote extends AbstractBaseEntity {
-    private Integer restaurantId;
-    private Integer menuId;
-    private LocalDateTime votingDate;
-    private Integer countVotes;
 
-    public Vote(Integer id, Integer restaurantId, Integer menuId, LocalDateTime dateTime, Integer countVotes) {
+    @Column(name = "date", nullable = false)
+    private LocalDate date = LocalDate.now();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Restaurant restaurant;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
+
+    public Vote() {}
+
+    public Vote(Integer id, LocalDate date) {
         super(id);
-        this.restaurantId = restaurantId;
-        this.menuId = menuId;
-        this.votingDate = dateTime;
-        this.countVotes = countVotes;
+        this.date = date;
     }
 
-    public Integer getRestaurantId() {
-        return restaurantId;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setRestaurantId(Integer restaurantId) {
-        this.restaurantId = restaurantId;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
-    public LocalDateTime getVotingDate() {
-        return votingDate;
+    public User getUser() {
+        return user;
     }
 
-    public void setVotingDate(LocalDateTime votingDate) {
-        this.votingDate = votingDate;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Integer getMenuId() {
-        return menuId;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setMenuId(Integer menuId) {
-        this.menuId = menuId;
-    }
-
-    public Integer getCountVotes() {
-        return countVotes;
-    }
-
-    public void setCountVotes(Integer countVotes) {
-        this.countVotes = countVotes;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", restaurantId=" + restaurantId +
-                ", menuId=" + menuId +
-                ", votingDate=" + votingDate +
-                ", countVotes=" + countVotes +
+                ", dateTime=" + date +
                 '}';
     }
 }

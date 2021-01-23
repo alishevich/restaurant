@@ -1,7 +1,10 @@
 package org.example.web;
 
-import org.example.repository.VoteRepository;
 
+import org.example.service.VoteService;
+import org.springframework.stereotype.Controller;
+
+@Controller
 public class VoteController {
-    private VoteRepository voteRepository;
+    private VoteService service;
 }
