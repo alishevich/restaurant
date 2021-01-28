@@ -4,7 +4,9 @@ import org.example.model.User;
 import org.example.repository.UserRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,8 +15,9 @@ import static org.example.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class UserService {
+    private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
 
-    private UserRepository repository;
+    private final UserRepository repository;
 
     public UserService(UserRepository repository) {
         this.repository = repository;
@@ -27,7 +30,7 @@ public class UserService {
 
     @CacheEvict(value = "users", allEntries = true)
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
     public User get(int id) {
@@ -40,11 +43,18 @@ public class UserService {
 
     @Cacheable("users")
     public List<User> getAll() {
-        return repository.findAll();
+        return repository.findAll(SORT_NAME_EMAIL);
     }
 
     @CacheEvict(value = "users", allEntries = true)
     public void update(User user) {
         checkNotFoundWithId(repository.save(user), user.getId());
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    @Transactional
+    public void enable(int id, boolean enabled) {
+        User user = get(id);
+        user.setEnabled(enabled);
     }
 }
