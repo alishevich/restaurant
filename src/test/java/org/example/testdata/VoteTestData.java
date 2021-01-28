@@ -1,17 +1,16 @@
-package org.example;
+package org.example.testdata;
 
-import org.example.model.Menu;
-import org.example.model.Restaurant;
+import org.example.TestMatcher;
 import org.example.model.Vote;
 
 import java.time.LocalDate;
 import java.time.Month;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.example.RestaurantTestData.restaurant1;
-import static org.example.RestaurantTestData.restaurant2;
-import static org.example.UserTestData.user1;
-import static org.example.UserTestData.user2;
+import static org.example.testdata.RestaurantTestData.restaurant1;
+import static org.example.testdata.RestaurantTestData.restaurant2;
+import static org.example.testdata.UserTestData.user1;
+import static org.example.testdata.UserTestData.user2;
 
 public class VoteTestData {
     public static final TestMatcher<Vote> VOTE_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Vote.class, "restaurant", "user");

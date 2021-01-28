@@ -1,5 +1,6 @@
-package org.example;
+package org.example.testdata;
 
+import org.example.TestMatcher;
 import org.example.model.Menu;
 
 import java.time.Month;
@@ -8,8 +9,8 @@ import java.util.List;
 
 import static java.time.LocalDate.of;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.example.DishTestData.*;
-import static org.example.RestaurantTestData.*;
+import static org.example.testdata.DishTestData.*;
+import static org.example.testdata.RestaurantTestData.*;
 
 public class MenuTestData {
     public static TestMatcher<Menu> MENU_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Menu.class,"dishes", "restaurant");

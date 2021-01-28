@@ -1,5 +1,6 @@
-package org.example;
+package org.example.testdata;
 
+import org.example.TestMatcher;
 import org.example.model.Dish;
 
 import java.util.Arrays;
