@@ -16,30 +16,32 @@ public class MenuTestData {
     public static TestMatcher<Menu> MENU_WITH_DISHES_MATCHER =
             TestMatcher.usingAssertions(Menu.class,
                     (a, e) -> assertThat(a).usingRecursiveComparison()
-                            .ignoringFields("dishes", "restaurant", "dish.menu").isEqualTo(e),
+                            .ignoringFields("restaurant", "dishes.menu").isEqualTo(e),
                     (a, e) -> {
-                        throw new UnsupportedOperationException();
+                        assertThat(a).usingRecursiveComparison()
+                                .ignoringFields("restaurant", "dishes.menu").isEqualTo(e);
                     });
 
-    public static final int MENU_ID = 0;
+    public static final int MENU1_ID = 0;
+    public static final int MENU_NOT_FOUND = 10;
 
-    public static final Menu menu1 = new Menu(MENU_ID, of(2021, Month.JANUARY, 25));
-    public static final Menu menu2 = new Menu(MENU_ID + 1, of(2021, Month.JANUARY, 26));
-    public static final Menu menu3 = new Menu(MENU_ID + 2, of(2021, Month.JANUARY, 27));
-    public static final Menu menu4 = new Menu(MENU_ID + 3, of(2021, Month.JANUARY, 25));
-    public static final Menu menu5 = new Menu(MENU_ID + 4, of(2021, Month.JANUARY, 26));
-    public static final Menu menu6 = new Menu(MENU_ID + 5, of(2021, Month.JANUARY, 27));
+    public static final Menu menu1 = new Menu(MENU1_ID, of(2021, Month.JANUARY, 25));
+    public static final Menu menu2 = new Menu(MENU1_ID + 1, of(2021, Month.JANUARY, 26));
+    public static final Menu menu3 = new Menu(MENU1_ID + 2, of(2021, Month.JANUARY, 27));
+    public static final Menu menu4 = new Menu(MENU1_ID + 3, of(2021, Month.JANUARY, 25));
+    public static final Menu menu5 = new Menu(MENU1_ID + 4, of(2021, Month.JANUARY, 26));
+    public static final Menu menu6 = new Menu(MENU1_ID + 5, of(2021, Month.JANUARY, 27));
 
     public static final List<Menu> MENU_REST_1 = Arrays.asList(menu1, menu2, menu3);
     public static final List<Menu> MENU_REST_2 = Arrays.asList(menu4, menu5, menu6);
 
     static {
         menu1.setDishes(Arrays.asList(dish1, dish2, dish3));
-        menu2.setDishes(Arrays.asList(dish3, dish4, dish5));
-        menu3.setDishes(Arrays.asList(dish6, dish7, dish8));
-        menu4.setDishes(Arrays.asList(dish9, dish10, dish11));
-        menu5.setDishes(Arrays.asList(dish12, dish13, dish14));
-        menu6.setDishes(Arrays.asList(dish15, dish16, dish8));
+        menu2.setDishes(Arrays.asList(dish4, dish5, dish6));
+        menu3.setDishes(Arrays.asList(dish7, dish8, dish9));
+        menu4.setDishes(Arrays.asList(dish10, dish11, dish12));
+        menu5.setDishes(Arrays.asList(dish13, dish14, dish15));
+        menu6.setDishes(Arrays.asList(dish16, dish17, dish18));
 
         menu1.setRestaurant(restaurant1);
         menu2.setRestaurant(restaurant1);
@@ -53,7 +55,15 @@ public class MenuTestData {
         return new Menu(null, of(2021, Month.JANUARY, 28));
     }
 
+    public static Menu getNewWithDishes() {
+      Menu newMenu =  getNew();
+      newMenu.setDishes(DishTestData.getNew());
+      return newMenu;
+    }
+
     public static Menu getUpdated() {
-        return new Menu(MENU_ID, menu1.getDate().plusDays(5));
+        Menu updateMenu = new Menu(MENU1_ID, menu1.getDate().plusDays(5));
+        updateMenu.setDishes(menu1.getDishes());
+        return updateMenu;
     }
 }
