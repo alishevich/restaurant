@@ -14,11 +14,19 @@ VALUES (0, 'User1', 'user1@yandex.ru', '{noop}password1'),
 INSERT INTO user_roles (role, user_id)
 VALUES ('USER', 0),
        ('USER', 1),
-       ('ADMIN', 2);
+       ('ADMIN', 2),
+       ('USER', 2);
 
 INSERT INTO restaurant (id, name, address, phone)
 VALUES (0, 'restaurant1', 'address1', '+375291111111'),
        (1, 'restaurant2', 'address2', '+375292222222');
+
+INSERT INTO vote (id, restaurant_id, user_id, date)
+VALUES (0, 0, 0, '2021-01-25'),
+       (1, 0, 1, '2021-01-25'),
+       (2, 0, 0, '2021-01-26'),
+       (3, 1, 1, '2021-02-26');
+
 
 INSERT INTO menu (id, restaurant_id, date)
 VALUES (0, 0, '2021-01-25'),
@@ -53,10 +61,5 @@ VALUES (0, 0, 'dish1', '10'),
        (16, 5, 'dish11', '61'),
        (17, 5, 'dish12', '62');
 
-INSERT INTO vote (id, restaurant_id, user_id, date_time)
-VALUES (0, 0, 0, '2021-02-25 10:00:00'),
-       (1, 0, 1, '2021-02-25 11:00:00'),
-       (2, 1, 0, '2021-02-26 10:30:00'),
-       (3, 1, 1, '2021-02-26 09:00:00');
 
 

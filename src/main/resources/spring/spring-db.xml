@@ -57,7 +57,6 @@
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
           p:entityManagerFactory-ref="entityManagerFactory"/>
 
-
     <context:component-scan base-package="org.example.**.repository"/>
     <jpa:repositories base-package="org.example.**.repository"/>
 
