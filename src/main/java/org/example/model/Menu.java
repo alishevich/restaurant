@@ -4,6 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,9 +13,11 @@ import java.util.List;
 public class Menu extends AbstractBaseEntity {
 
     @Column(name = "date", nullable = false)
+    @NotNull
     private LocalDate date;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
+    @NotNull
     private List<Dish> dishes;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,7 +44,7 @@ public class Menu extends AbstractBaseEntity {
         return date;
     }
 
-    public void setDateTime(LocalDate date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

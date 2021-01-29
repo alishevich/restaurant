@@ -2,6 +2,7 @@ package org.example.model;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 public class Dish extends AbstractNamedEntity {
 
     @Column(name = "amount", nullable = false)
+    @Range(min = 1, max = 1000)
     private Integer amount;
 
      @ManyToOne(fetch = FetchType.LAZY)

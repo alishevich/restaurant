@@ -5,6 +5,7 @@ import org.example.HasId;
 import javax.persistence.*;
 
 @MappedSuperclass
+@Access(AccessType.FIELD)
 public class AbstractBaseEntity implements HasId {
 
     @Id

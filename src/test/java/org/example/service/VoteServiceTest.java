@@ -1,11 +1,13 @@
 package org.example.service;
 
+import org.example.model.Restaurant;
 import org.example.testdata.VoteTestData;
 import org.example.model.Vote;
 import org.example.util.exception.IllegalVoteTimeException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -79,5 +81,10 @@ public class VoteServiceTest extends AbstractServiceTest{
     void delete() {
         service.delete(VOTE1_ID, USER1_ID);
         assertNull(service.get(DATE, USER1_ID));
+    }
+
+    @Test
+    public void createWithException() {
+        validateRootCause(() -> service.create(new Vote(null, null), RESTAURANT1_ID, USER1_ID), ConstraintViolationException.class);
     }
 }

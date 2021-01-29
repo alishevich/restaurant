@@ -1,15 +1,21 @@
 package org.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Entity
 @Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "address"}, name = "name_address_idx")})
 public class Restaurant extends AbstractNamedEntity {
     @Column(name = "address", nullable = false)
+    @NotBlank
     private String address;
 
     @Column(name = "phone", nullable = false)
+    @NotBlank
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$",
+            message = "Telephone number should start with country code, then 10 digits")
     private String phone;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")

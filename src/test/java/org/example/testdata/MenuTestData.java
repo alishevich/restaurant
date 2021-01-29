@@ -56,6 +56,10 @@ public class MenuTestData {
         return new Menu(null, of(2021, Month.JANUARY, 28));
     }
 
+    public static Menu getNewWithoutDate() {
+        return new Menu(null, null);
+    }
+
     public static Menu getNewWithDishes() {
       Menu newMenu =  getNew();
       newMenu.setDishes(DishTestData.getNew());

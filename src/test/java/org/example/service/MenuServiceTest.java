@@ -1,12 +1,16 @@
 package org.example.service;
 
 import org.example.model.Menu;
+import org.example.model.Role;
+import org.example.model.User;
 import org.example.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Collections;
 import java.util.List;
 
 import static org.example.testdata.MenuTestData.*;
@@ -77,5 +81,11 @@ class MenuServiceTest extends AbstractServiceTest {
         newMenu.setId(newId);
         MENU_MATCHER.assertMatch(created, newMenu);
         MENU_MATCHER.assertMatch(service.get(newId, RESTAURANT1_ID), newMenu);
+    }
+
+    @Test
+    public void createWithException() {
+        validateRootCause(() -> service.createWithDishes(getNew(), RESTAURANT1_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.createWithDishes(getNewWithoutDate(), RESTAURANT1_ID), ConstraintViolationException.class);
     }
 }

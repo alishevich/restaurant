@@ -2,11 +2,15 @@ package org.example.service;
 
 import org.example.model.Restaurant;
 
+import org.example.model.Role;
+import org.example.model.User;
 import org.example.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
+import javax.validation.ConstraintViolationException;
+import java.util.Collections;
 import java.util.List;
 
 import static org.example.testdata.RestaurantTestData.*;
@@ -66,6 +70,13 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void deleteNotFound() {
         assertThrows(NotFoundException.class, () -> service.delete(RESTAURANT_NOT_FOUND));
+    }
+
+    @Test
+    public void createWithException() {
+        validateRootCause(() -> service.create(new Restaurant(null, " ", "address", "+375291111111")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant(null, "name", " ", "+375291111111")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant(null, "name", "address", "+291111111")), ConstraintViolationException.class);
     }
 }
 

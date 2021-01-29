@@ -7,9 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import javax.validation.ConstraintViolationException;
+import java.util.*;
 
 import static org.example.testdata.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,5 +82,13 @@ public class UserServiceTest extends AbstractServiceTest{
         assertFalse(service.get(USER1_ID).isEnabled());
         service.enable(USER1_ID, true);
         assertTrue(service.get(USER1_ID).isEnabled());
+    }
+
+    @Test
+    public void createWithException() {
+        validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "password",true, null, Collections.EMPTY_SET )), ConstraintViolationException.class);
     }
 }

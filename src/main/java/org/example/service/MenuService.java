@@ -57,10 +57,12 @@ public class MenuService {
         if (!menu.isNew() && get(menu.getId(), restaurantId) == null) {
             return null;
         }
-        List<Dish> dishes = menu.getDishes().stream()
-                .peek(dish -> dish.setMenu(menu))
-                .collect(Collectors.toList());
-        menu.setDishes(dishes);
+        List<Dish> dishes = menu.getDishes();
+        if (dishes != null && !dishes.isEmpty()) {
+            menu.setDishes(dishes.stream()
+                    .peek(dish -> dish.setMenu(menu))
+                    .collect(Collectors.toList()));
+        }
         menu.setRestaurant(restaurantRepository.getOne(restaurantId));
         return menuRepository.save(menu);
     }
