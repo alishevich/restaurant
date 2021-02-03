@@ -10,7 +10,6 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 import static org.example.util.ValidationUtil.checkNotFoundWithId;
 
@@ -30,20 +29,13 @@ public class VoteService {
     }
 
     public Vote get(LocalDate date, int userId) {
-       return voteRepository.getByDate(date, userId);
-    }
-
-    public List<Vote> getAllWithRestaurant(LocalDate date) {
-        return voteRepository.getAllWithRestaurantByDate(date);
-    }
-
-    public List<Vote> getAllForRestaurant(LocalDate date, int restaurantId) {
-        return checkNotFoundWithId(voteRepository.getAllForRestaurant(date, restaurantId), restaurantId);
+       return voteRepository.get(date, userId);
     }
 
     public Vote getWithRestaurant(LocalDate date, int userId) {
         return voteRepository.getWithRestaurant(date, userId);
     }
+
 
     public void vote(int restaurantId, int userId) {
         LocalTime votingTime = LocalTime.now();
@@ -71,10 +63,6 @@ public class VoteService {
         Assert.notNull(vote, "vote must not be null");
         vote.setRestaurant(restaurantRepository.getOne(restaurantId));
         checkNotFoundWithId(voteRepository.save(vote), vote.id());
-    }
-
-    public void delete(int id, int userId) {
-        checkNotFoundWithId(voteRepository.delete(id, userId) != 0, id);
     }
 
     public void setTimeLimitForVote(LocalTime time) {

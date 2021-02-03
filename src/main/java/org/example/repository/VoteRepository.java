@@ -15,21 +15,13 @@ import java.util.List;
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
     @Query("SELECT v FROM Vote v WHERE v.date=:date AND v.user.id=:userId")
-    Vote getByDate(@Param("date") LocalDate date, @Param("userId") int userId);
-
-    @EntityGraph(attributePaths = {"restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT v FROM Vote v WHERE v.date=:date")
-    List<Vote> getAllWithRestaurantByDate(@Param("date") LocalDate date);
-
-    @Query("SELECT v FROM Vote v WHERE v.restaurant.id=:restaurantId AND v.date=:date")
-    List<Vote> getAllForRestaurant(@Param("date") LocalDate date, @Param("restaurantId") int restaurantId);
+    Vote get(@Param("date") LocalDate date, @Param("userId") int userId);
 
     @EntityGraph(attributePaths = {"restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT v FROM Vote v WHERE v.date=:date AND v.user.id=:userId")
     Vote getWithRestaurant(@Param("date") LocalDate date, @Param("userId") int userId);
 
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM Vote v WHERE v.id=:id AND v.user.id=:userId")
-    int delete(@Param("id") int id, @Param("userId") int userId);
+    @EntityGraph(attributePaths = {"restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT v FROM Vote v WHERE v.date=:date")
+    List<Vote> getAllWithRestaurantByDate(@Param("date") LocalDate date);
 }

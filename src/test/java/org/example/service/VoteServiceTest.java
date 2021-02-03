@@ -1,6 +1,5 @@
 package org.example.service;
 
-import org.example.model.Restaurant;
 import org.example.testdata.VoteTestData;
 import org.example.model.Vote;
 import org.example.util.exception.IllegalVoteTimeException;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 import static org.example.testdata.RestaurantTestData.*;
 import static org.example.testdata.VoteTestData.*;
@@ -25,27 +23,18 @@ public class VoteServiceTest extends AbstractServiceTest{
     @Autowired
     protected VoteService service;
 
+    /*
     @Test
     void get() {
         Vote actual = service.get(DATE, USER1_ID);
         VOTE_MATCHER.assertMatch(actual, vote1);
     }
 
+     */
+
     @Test
     void getNotFound() {
         assertNull(service.get(VOTE_NOT_FOUND, USER1_ID));
-    }
-
-    @Test
-    void getAllWithRestaurant() {
-        List<Vote> actual = service.getAllWithRestaurant(DATE);
-        VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual, vote1, vote2);
-    }
-
-    @Test
-    void getAllForRestaurant() {
-        List<Vote> actual = service.getAllForRestaurant(DATE, RESTAURANT1_ID);
-        VOTE_MATCHER.assertMatch(actual, vote1, vote2);
     }
 
     @Test
@@ -81,12 +70,6 @@ public class VoteServiceTest extends AbstractServiceTest{
     void doubleWithExcessTimeLimitVote() {
         service.setTimeLimitForVote(LocalTime.now().minusHours(1));
         assertThrows(IllegalVoteTimeException.class, () -> service.vote(RESTAURANT1_ID, USER1_ID));
-    }
-
-    @Test
-    void delete() {
-        service.delete(VOTE1_ID, USER1_ID);
-        assertNull(service.get(DATE, USER1_ID));
     }
 
     @Test
