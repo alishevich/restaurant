@@ -2,18 +2,21 @@ package org.example.service;
 
 import org.example.model.Restaurant;
 
-import org.example.model.Role;
-import org.example.model.User;
+import org.example.testdata.MenuTestData;
+import org.example.testdata.VoteTestData;
 import org.example.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Collections;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 import static org.example.testdata.RestaurantTestData.*;
+import static org.example.testdata.VoteTestData.vote1;
+import static org.example.testdata.VoteTestData.vote2;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RestaurantServiceTest extends AbstractServiceTest {
@@ -36,6 +39,35 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     void getAll() {
         List<Restaurant> actual = service.getAll();
         RESTAURANT_MATCHER.assertMatch(actual, restaurant1, restaurant2);
+    }
+
+    @Test
+    void getAllByDate() {
+        List<Restaurant> actual = service.getAllByDate(LocalDate.of(2021, Month.JANUARY, 25));
+        RESTAURANT_MATCHER.assertMatch(actual, restaurant1, restaurant2);
+    }
+
+    @Test
+    void getWithMenusByDate() {
+        Restaurant actual = service.getWithMenusByDate(RESTAURANT1_ID, LocalDate.of(2021, Month.JANUARY, 25));
+        RESTAURANT_MATCHER.assertMatch(actual, restaurant1);
+        MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.getMenus(), MenuTestData.menu1);
+    }
+
+    @Test
+    void getAllWithMenus() {
+        List<Restaurant> actual = service.getAllWithMenus(LocalDate.of(2021, Month.JANUARY, 25));
+        RESTAURANT_MATCHER.assertMatch(actual, restaurant1, restaurant2);
+        MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.get(0).getMenus(), MenuTestData.menu1);
+        MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.get(1).getMenus(), MenuTestData.menu4);
+    }
+
+    @Test
+    void getAllWithVotes() {
+        List<Restaurant> actual = service.getAllWithVotes(LocalDate.of(2021, Month.JANUARY, 25));
+        RESTAURANT_MATCHER.assertMatch(actual, restaurant1, restaurant2);
+        VoteTestData.VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual.get(0).getVotes(), vote1, vote2);
+        VoteTestData.VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual.get(1).getVotes());
     }
 
     @Test

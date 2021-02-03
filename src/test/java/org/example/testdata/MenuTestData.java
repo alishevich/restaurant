@@ -13,7 +13,7 @@ import static org.example.testdata.DishTestData.*;
 import static org.example.testdata.RestaurantTestData.*;
 
 public class MenuTestData {
-    public static TestMatcher<Menu> MENU_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Menu.class,"dishes", "restaurant");
+    public static TestMatcher<Menu> MENU_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Menu.class, "dishes", "restaurant");
     public static TestMatcher<Menu> MENU_WITH_DISHES_MATCHER =
             TestMatcher.usingAssertions(Menu.class,
                     (a, e) -> assertThat(a).usingRecursiveComparison()

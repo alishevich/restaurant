@@ -1,8 +1,6 @@
 package org.example.service;
 
 import org.example.model.Menu;
-import org.example.model.Role;
-import org.example.model.User;
 import org.example.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Collections;
 import java.util.List;
 
 import static org.example.testdata.MenuTestData.*;
@@ -22,12 +19,12 @@ class MenuServiceTest extends AbstractServiceTest {
     @Autowired
     protected MenuService service;
 
-
     @Test
     void get() {
         Menu actual = service.get(MENU1_ID, RESTAURANT1_ID);
         MENU_MATCHER.assertMatch(actual, menu1);
     }
+
 
     @Test
     void getWithDishes() {
@@ -77,10 +74,10 @@ class MenuServiceTest extends AbstractServiceTest {
     void createWithDishes() {
         Menu created = service.createWithDishes(getNewWithDishes(), RESTAURANT1_ID);
         int newId = created.id();
-        Menu newMenu = getNew();
+        Menu newMenu = getNewWithDishes();
         newMenu.setId(newId);
-        MENU_MATCHER.assertMatch(created, newMenu);
-        MENU_MATCHER.assertMatch(service.get(newId, RESTAURANT1_ID), newMenu);
+        MENU_WITH_DISHES_MATCHER.assertMatch(created, newMenu);
+        MENU_MATCHER.assertMatch(service.getWithDishes(newId, RESTAURANT1_ID), newMenu);
     }
 
     @Test

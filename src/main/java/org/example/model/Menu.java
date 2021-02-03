@@ -16,7 +16,7 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private LocalDate date;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu")
     @NotNull
     private List<Dish> dishes;
 
@@ -61,7 +61,7 @@ public class Menu extends AbstractBaseEntity {
         return "Menu{" +
                 "id=" + id +
                 ", dishes=" + dishes +
-                ", dateTime=" + date +
+                ", date=" + date +
                 '}';
     }
 }

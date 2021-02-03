@@ -33,6 +33,10 @@ public class VoteService {
        return voteRepository.getByDate(date, userId);
     }
 
+    public List<Vote> getAllWithRestaurant(LocalDate date) {
+        return voteRepository.getAllWithRestaurantByDate(date);
+    }
+
     public List<Vote> getAllForRestaurant(LocalDate date, int restaurantId) {
         return checkNotFoundWithId(voteRepository.getAllForRestaurant(date, restaurantId), restaurantId);
     }

@@ -1,16 +1,39 @@
 package org.example.testdata;
 
 import org.example.TestMatcher;
+import org.example.model.Menu;
 import org.example.model.Restaurant;
 
-public class RestaurantTestData {
-    public static final TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Restaurant.class, "menus");
+import java.util.Arrays;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.example.testdata.MenuTestData.*;
+import static org.example.testdata.VoteTestData.*;
+
+public class RestaurantTestData {
+    public static final TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Restaurant.class, "menus", "votes");
+    public static final TestMatcher<Restaurant> RESTAURANT_WITH_MENUS_MATCHER =
+            TestMatcher.usingAssertions(Restaurant.class,
+            (a, e) -> assertThat(a).usingRecursiveComparison()
+                    .ignoringFields("menus.dishes.menu", "menus.restaurant",  "votes").isEqualTo(e),
+            (a, e) -> {
+                assertThat(a).usingRecursiveComparison()
+                        .ignoringFields("menus.dishes.menu", "menus.restaurant", "votes").isEqualTo(e);
+            });
     public static final int RESTAURANT1_ID = 0;
     public static final int RESTAURANT_NOT_FOUND = 10;
 
     public static final Restaurant restaurant1 = new Restaurant(RESTAURANT1_ID,"restaurant1", "address1", "+375291111111");
     public static final Restaurant restaurant2 = new Restaurant(RESTAURANT1_ID + 1,"restaurant2", "address2", "+375292222222");
+
+    static {
+        restaurant1.setMenus(Arrays.asList(menu1, menu2, menu3));
+        restaurant2.setMenus(Arrays.asList(menu4, menu5, menu6));
+
+        restaurant1.setVotes(Arrays.asList(vote1, vote2, vote3));
+        restaurant2.setVotes(Arrays.asList(vote4));
+
+    }
 
 
     public static Restaurant getNew() {

@@ -37,6 +37,12 @@ public class VoteServiceTest extends AbstractServiceTest{
     }
 
     @Test
+    void getAllWithRestaurant() {
+        List<Vote> actual = service.getAllWithRestaurant(DATE);
+        VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual, vote1, vote2);
+    }
+
+    @Test
     void getAllForRestaurant() {
         List<Vote> actual = service.getAllForRestaurant(DATE, RESTAURANT1_ID);
         VOTE_MATCHER.assertMatch(actual, vote1, vote2);

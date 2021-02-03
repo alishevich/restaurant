@@ -17,10 +17,10 @@ public class VoteTestData {
     public static TestMatcher<Vote> VOTE_WITH_RESTAURANT_MATCHER =
             TestMatcher.usingAssertions(Vote.class,
                     (a, e) -> assertThat(a).usingRecursiveComparison()
-                            .ignoringFields("restaurant.menus",  "user").isEqualTo(e),
+                            .ignoringFields("restaurant.menus", "restaurant.votes",  "user").isEqualTo(e),
                     (a, e) -> {
                         assertThat(a).usingRecursiveComparison()
-                                .ignoringFields("restaurant.menus",  "user").isEqualTo(e);
+                                .ignoringFields("restaurant.menus", "restaurant.votes",  "user").isEqualTo(e);
                     });
 
     public static final int VOTE1_ID = 0;
@@ -29,13 +29,19 @@ public class VoteTestData {
 
     public static final Vote vote1 = new Vote(VOTE1_ID, LocalDate.of(2021, Month.JANUARY, 25));
     public static final Vote vote2 = new Vote(VOTE1_ID + 1, LocalDate.of(2021, Month.JANUARY, 25));
+    public static final Vote vote3 = new Vote(VOTE1_ID + 2, LocalDate.of(2021, Month.JANUARY, 26));
+    public static final Vote vote4 = new Vote(VOTE1_ID + 3, LocalDate.of(2021, Month.JANUARY, 26));
 
     static {
         vote1.setRestaurant(restaurant1);
         vote2.setRestaurant(restaurant1);
+        vote3.setRestaurant(restaurant1);
+        vote4.setRestaurant(restaurant2);
 
         vote1.setUser(user1);
         vote2.setUser(user2);
+        vote3.setUser(user1);
+        vote4.setUser(user2);
     }
 
     public static Vote getNew() {
@@ -54,9 +60,4 @@ public class VoteTestData {
         updated.setRestaurant(restaurant2);
         return updated;
     }
-
-
-
-
-
 }
