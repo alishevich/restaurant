@@ -28,9 +28,6 @@ public class RestaurantService {
 
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
-        if (!restaurant.isNew()) {
-            return null;
-        }
         return restaurantRepository.save(restaurant);
     }
 

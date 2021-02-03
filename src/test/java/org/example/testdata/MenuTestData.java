@@ -33,8 +33,9 @@ public class MenuTestData {
     public static final Menu menu5 = new Menu(MENU1_ID + 4, of(2021, Month.JANUARY, 26));
     public static final Menu menu6 = new Menu(MENU1_ID + 5, of(2021, Month.JANUARY, 27));
 
-    public static final List<Menu> MENU_REST_1 = Arrays.asList(menu1, menu2, menu3);
-    public static final List<Menu> MENU_REST_2 = Arrays.asList(menu4, menu5, menu6);
+    public static final List<Menu> MENUS_REST_1 = Arrays.asList(menu1, menu2, menu3);
+    public static final List<Menu> MENUS_REST_2 = Arrays.asList(menu4, menu5, menu6);
+    public static final List<Menu> MENUS_ALL = Arrays.asList(menu1, menu2, menu3, menu4, menu5, menu6);
 
     static {
         menu1.setDishes(Arrays.asList(dish1, dish2, dish3));

@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.model.Dish;
 import org.example.model.Menu;
+import org.example.model.Restaurant;
 import org.example.repository.MenuRepository;
 import org.example.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
@@ -23,47 +24,33 @@ public class MenuService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public Menu get(int id, int restaurantId) {
-       return checkNotFoundWithId(
-               menuRepository.findById(id)
-                 .filter(menu -> menu.getRestaurant().getId() == restaurantId)
-                 .orElse(null),
-               id);
+    public Menu getWithDishes(int id) {
+       return checkNotFoundWithId(menuRepository.getWithDishes(id), id);
     }
 
-    public Menu getWithDishes(int id, int restaurantId) {
-       return checkNotFoundWithId(menuRepository.getWithDishes(id, restaurantId), id);
+    public void delete(int id) {
+        checkNotFoundWithId(menuRepository.delete(id) != 0, id);
     }
 
-    public void delete(int id, int restaurantId) {
-        checkNotFoundWithId(menuRepository.delete(id, restaurantId) != 0, id);
-    }
-
-    public List<Menu> getBetweenInclusiveWithDishes(LocalDate startDate,LocalDate endDate, int restaurantId) {
-        return menuRepository.getBetweenInclusiveWithDishes(startDate, endDate, restaurantId);
-    }
-
-    public List<Menu> getAllWithDishes(int restaurantId) {
-        return menuRepository.getAllWithDishes(restaurantId);
+    public List<Menu> getAllWithDishes() {
+        return menuRepository.findAll();
     }
 
     public void update(Menu menu, int restaurantId) {
-        Assert.notNull(menu, "meal must not be null");
+        Assert.notNull(menu, "menu must not be null");
         checkNotFoundWithId(createWithDishes(menu, restaurantId), menu.getId());
     }
 
     public Menu createWithDishes(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");
-        if (!menu.isNew() && get(menu.getId(), restaurantId) == null) {
-            return null;
-        }
         List<Dish> dishes = menu.getDishes();
         if (dishes != null && !dishes.isEmpty()) {
             menu.setDishes(dishes.stream()
                     .peek(dish -> dish.setMenu(menu))
                     .collect(Collectors.toList()));
         }
-        menu.setRestaurant(restaurantRepository.getOne(restaurantId));
+        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getOne(restaurantId), restaurantId);
+        menu.setRestaurant(restaurant);
         return menuRepository.save(menu);
     }
 

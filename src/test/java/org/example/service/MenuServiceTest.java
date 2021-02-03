@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintViolationException;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 import static org.example.testdata.MenuTestData.*;
@@ -20,54 +18,38 @@ class MenuServiceTest extends AbstractServiceTest {
     protected MenuService service;
 
     @Test
-    void get() {
-        Menu actual = service.get(MENU1_ID, RESTAURANT1_ID);
-        MENU_MATCHER.assertMatch(actual, menu1);
-    }
-
-
-    @Test
     void getWithDishes() {
-        Menu actual = service.getWithDishes(MENU1_ID, RESTAURANT1_ID);
+        Menu actual = service.getWithDishes(MENU1_ID);
         MENU_WITH_DISHES_MATCHER.assertMatch(actual, menu1);
     }
 
     @Test
     void getWithDishesNotFound() {
-        assertThrows(NotFoundException.class, () -> service.get(MENU_NOT_FOUND, RESTAURANT1_ID));
-    }
-
-    @Test
-    void getBetweenInclusiveWithDishes() {
-        List<Menu> actual = service.getBetweenInclusiveWithDishes(
-                LocalDate.of(2021, Month.JANUARY, 25),
-                LocalDate.of(2021, Month.JANUARY, 27),
-                RESTAURANT1_ID);
-        MENU_WITH_DISHES_MATCHER.assertMatch(actual, menu3, menu2, menu1);
+        assertThrows(NotFoundException.class, () -> service.getWithDishes(MENU_NOT_FOUND));
     }
 
     @Test
     void getAllWithDishes() {
-        List<Menu> actual = service.getAllWithDishes(RESTAURANT1_ID);
-        MENU_WITH_DISHES_MATCHER.assertMatch(actual, MENU_REST_1);
+        List<Menu> actual = service.getAllWithDishes();
+        MENU_WITH_DISHES_MATCHER.assertMatch(actual, MENUS_ALL);
     }
 
     @Test
     void delete() {
-        service.delete(MENU1_ID, RESTAURANT1_ID);
-        assertThrows(NotFoundException.class, () -> service.get(MENU1_ID, RESTAURANT1_ID));
+        service.delete(MENU1_ID);
+        assertThrows(NotFoundException.class, () -> service.getWithDishes(MENU1_ID));
     }
 
     @Test
     void deleteNotFound() {
-        assertThrows(NotFoundException.class, () -> service.delete(MENU_NOT_FOUND, RESTAURANT1_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(MENU_NOT_FOUND));
     }
 
     @Test
     void update() {
         Menu updated = getUpdated();
         service.update(updated, RESTAURANT1_ID);
-        MENU_WITH_DISHES_MATCHER.assertMatch(service.getWithDishes(MENU1_ID, RESTAURANT1_ID), updated);
+        MENU_WITH_DISHES_MATCHER.assertMatch(service.getWithDishes(MENU1_ID), updated);
     }
 
     @Test
@@ -77,7 +59,7 @@ class MenuServiceTest extends AbstractServiceTest {
         Menu newMenu = getNewWithDishes();
         newMenu.setId(newId);
         MENU_WITH_DISHES_MATCHER.assertMatch(created, newMenu);
-        MENU_MATCHER.assertMatch(service.getWithDishes(newId, RESTAURANT1_ID), newMenu);
+        MENU_MATCHER.assertMatch(service.getWithDishes(newId), newMenu);
     }
 
     @Test
