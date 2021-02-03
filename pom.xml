@@ -17,6 +17,7 @@
 
     <spring.version>5.3.2</spring.version>
     <spring-data-jpa.version>2.4.2</spring-data-jpa.version>
+    <jackson-json.version>2.12.1</jackson-json.version>
     <tomcat.version>9.0.41</tomcat.version>
 
     <!-- Logging -->
@@ -166,6 +167,25 @@
       <scope>provided</scope>
     </dependency>
 
+    <!--JSON-->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson-json.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-hibernate5</artifactId>
+      <version>${jackson-json.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>${jackson-json.version}</version>
+    </dependency>
+
     <!--Test-->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -180,6 +200,7 @@
       <version>${hamcrest.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>com.jayway.jsonpath</groupId>
       <artifactId>json-path</artifactId>
