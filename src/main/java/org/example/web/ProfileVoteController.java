@@ -6,10 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.time.LocalDate;
+
+import static org.example.web.SecurityUtil.authUserId;
 
 @RestController
 @RequestMapping(value = ProfileVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -20,14 +23,16 @@ public class ProfileVoteController {
     @Autowired
     private VoteService service;
 
-    @GetMapping("/toDate")
-    public Vote getWithRestaurant(@RequestParam LocalDate date, @RequestParam int userId) {
+    @GetMapping("/with-restaurant")
+    public Vote getWithRestaurant(@RequestParam @Nullable LocalDate date) {
+        int userId = authUserId();
         log.info("get vote by date {} for user {}", date, userId);
         return service.getWithRestaurant(date, userId);
     }
 
     @PatchMapping("/")
-    public void vote(@RequestParam int restaurantId, @RequestParam int userId) {
+    public void vote(@RequestParam int restaurantId) {
+        int userId = authUserId();
         log.info("vote user {} by  restaurant {}", userId, restaurantId);
         service.vote(restaurantId, userId);
     }
