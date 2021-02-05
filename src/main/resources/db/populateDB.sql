@@ -7,25 +7,25 @@ DELETE FROM menu;
 DELETE FROM restaurant;
 
 INSERT INTO users (id, name, email, password)
-VALUES (0, 'User1', 'user1@yandex.ru', '{noop}password1'),
-       (1, 'User2', 'user2@yandex.ru', '{noop}password2'),
-       (2, 'Admin', 'admin@gmail.com', '{noop}admin');
+VALUES (0, 'Admin', 'admin@gmail.com', '{noop}admin'),
+       (1, 'User1', 'user1@yandex.ru', '{noop}password1'),
+       (2, 'User2', 'user2@yandex.ru', '{noop}password2');
 
 INSERT INTO user_roles (role, user_id)
-VALUES ('USER', 0),
-       ('USER', 1),
-       ('ADMIN', 2),
-       ('USER', 2);
+VALUES ('USER', 1),
+       ('USER', 2),
+       ('ADMIN', 0),
+       ('USER', 0);
 
 INSERT INTO restaurant (id, name, address, phone)
 VALUES (0, 'restaurant1', 'address1', '+375291111111'),
        (1, 'restaurant2', 'address2', '+375292222222');
 
 INSERT INTO vote (id, restaurant_id, user_id, date)
-VALUES (0, 0, 0, '2021-01-25'),
-       (1, 0, 1, '2021-01-25'),
-       (2, 0, 0, '2021-01-26'),
-       (3, 1, 1, '2021-02-26');
+VALUES (0, 0, 1, '2021-01-25'),
+       (1, 0, 2, '2021-01-25'),
+       (2, 0, 1, '2021-01-26'),
+       (3, 1, 2, '2021-02-26');
 
 
 INSERT INTO menu (id, restaurant_id, date)

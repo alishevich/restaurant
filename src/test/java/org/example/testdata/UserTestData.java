@@ -10,8 +10,8 @@ import java.util.Date;
 public class UserTestData {
     public static final TestMatcher<User> USER_MATCHER = TestMatcher.usingIgnoringFieldsComparator(User.class, "password", "registered", "votes");
 
-    public static final int USER1_ID = 0;
-    public static final int ADMIN_ID = USER1_ID + 2;
+    public static final int ADMIN_ID = 0;
+    public static final int USER1_ID = ADMIN_ID + 1;
     public static final int USER_NOT_FOUND = 10;
 
 
