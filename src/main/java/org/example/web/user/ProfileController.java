@@ -10,7 +10,7 @@ import static org.example.web.SecurityUtil.authUserId;
 @RestController
 @RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController extends AbstractUserController {
-    static final String REST_URL = "rest/profile";
+    static final String REST_URL = "/rest/profile";
 
     @GetMapping
     public User get() {
@@ -25,7 +25,7 @@ public class ProfileController extends AbstractUserController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(User user) {
+    public void update(@RequestBody User user) {
         super.update(user, authUserId());
     }
 
