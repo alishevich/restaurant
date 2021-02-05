@@ -1,9 +1,15 @@
 package org.example;
 
+import org.springframework.test.web.servlet.ResultMatcher;
+
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.example.TestUtil.readListFromJsonMvcResult;
 
 public class TestMatcher<T> {
     private final Class<T> clazz;
@@ -43,5 +49,18 @@ public class TestMatcher<T> {
 
     public void assertMatch(Iterable<T> actual, Iterable<T> expected) {
         iterableAssertion.accept(actual, expected);
+    }
+
+    public ResultMatcher contentJson(T expected) {
+        return result -> assertMatch(TestUtil.readFromJsonMvcResult(result, clazz), expected);
+    }
+
+    @SafeVarargs
+    public final ResultMatcher contentJson(T... expected) {
+        return contentJson(Arrays.stream(expected).collect(Collectors.toList()));
+    }
+
+    public ResultMatcher contentJson(Iterable<T> expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, clazz), expected);
     }
 }
