@@ -5,6 +5,13 @@ import org.example.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
@@ -48,4 +55,10 @@ public class AbstractUserController {
               log.info("getByEmail {}", email);
               return service.getByEmail(email);
        }
+
+       public void enable(int id, boolean enabled) {
+              log.info(enabled ? "enable {}" : "disable {}", id);
+              service.enable(id, enabled);
+       }
+
 }
