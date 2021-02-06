@@ -15,6 +15,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static org.example.util.ValidationUtil.assureIdConsistent;
+
 @RestController
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminMenuController {
@@ -37,7 +39,8 @@ public class AdminMenuController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Menu> createWithLocation(@RequestBody Menu menu, @RequestBody int restaurantId) {
+    public ResponseEntity<Menu> createWithLocation(@RequestBody Menu menu,
+                                                   @RequestParam int restaurantId) {
         ValidationUtil.checkNew(menu);
         log.info("create {}", menu);
         Menu created = service.createWithDishes(menu, restaurantId);
@@ -56,10 +59,13 @@ public class AdminMenuController {
         service.delete(id);
     }
 
-    @PutMapping
+    @PutMapping(value = "/{id}",  consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Menu menu, @RequestBody int restaurantId) {
-        log.info("update {} for restaurant {}", menu, restaurantId);
+    public void update(@RequestBody Menu menu,
+                       @PathVariable int id,
+                       @RequestParam int restaurantId) {
+        assureIdConsistent(menu, id);
+        log.info("update menu {} for restaurant {}", menu, restaurantId);
         service.update(menu, restaurantId);
     }
 }

@@ -3,6 +3,7 @@ package org.example.testdata;
 import org.example.TestMatcher;
 import org.example.model.Dish;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,6 +38,6 @@ public class DishTestData {
 
     public static List<Dish> getNew() {
         return Arrays.asList(new Dish(null, "newDish1", 1),
-                new Dish(null, "newDish2", 2));
+                             new Dish(null, "newDish2", 2));
     }
 }
