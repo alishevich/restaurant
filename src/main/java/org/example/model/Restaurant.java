@@ -1,5 +1,8 @@
 package org.example.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -18,9 +21,11 @@ public class Restaurant extends AbstractNamedEntity {
             message = "Telephone number should start with country code, then 10 digits")
     private String phone;
 
+    //@JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private List<Menu> menus;
 
+    //@JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private List<Vote> votes;
 
@@ -59,7 +64,6 @@ public class Restaurant extends AbstractNamedEntity {
     public void setMenus(List<Menu> menus) {
         this.menus = menus;
     }
-
 
     public List<Vote> getVotes() {
         return votes;

@@ -1,10 +1,13 @@
 package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "dish")
@@ -16,7 +19,9 @@ public class Dish extends AbstractNamedEntity {
 
      @ManyToOne(fetch = FetchType.LAZY)
      @JoinColumn(name = "menu_id", nullable = false)
+     @NotNull
      @OnDelete(action = OnDeleteAction.CASCADE)
+     @JsonIgnore
      private Menu menu;
 
     public Dish(){}

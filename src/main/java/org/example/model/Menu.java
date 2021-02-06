@@ -1,10 +1,12 @@
 package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,8 +23,10 @@ public class Menu extends AbstractBaseEntity {
     private List<Dish> dishes;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Restaurant restaurant;
 
     public Menu() {}

@@ -1,5 +1,6 @@
 package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,8 +18,10 @@ public class Vote extends AbstractBaseEntity {
     private LocalDate date = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Restaurant restaurant;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -61,7 +64,7 @@ public class Vote extends AbstractBaseEntity {
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", dateTime=" + date +
+                ", date=" + date +
                 '}';
     }
 }
