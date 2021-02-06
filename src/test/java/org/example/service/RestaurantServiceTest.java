@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.model.Restaurant;
 
 import org.example.testdata.MenuTestData;
+import org.example.testdata.RestaurantTestData;
 import org.example.testdata.VoteTestData;
 import org.example.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void getAll() {
         List<Restaurant> actual = service.getAll();
-        RESTAURANT_MATCHER.assertMatch(actual, restaurant1, restaurant2);
+        RESTAURANT_MATCHER.assertMatch(actual, RestaurantTestData.getAll());
     }
 
     @Test
@@ -57,7 +58,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void getAllWithMenus() {
         List<Restaurant> actual = service.getAllWithMenus(LocalDate.of(2021, Month.JANUARY, 25));
-        RESTAURANT_MATCHER.assertMatch(actual, restaurant1, restaurant2);
+        RESTAURANT_MATCHER.assertMatch(actual, RestaurantTestData.getAll());
         MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.get(0).getMenus(), MenuTestData.menu1);
         MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.get(1).getMenus(), MenuTestData.menu4);
     }
@@ -65,7 +66,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void getAllWithVotes() {
         List<Restaurant> actual = service.getAllWithVotes(LocalDate.of(2021, Month.JANUARY, 25));
-        RESTAURANT_MATCHER.assertMatch(actual, restaurant1, restaurant2);
+        RESTAURANT_MATCHER.assertMatch(actual, RestaurantTestData.getAll());
         VoteTestData.VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual.get(0).getVotes(), vote1, vote2);
         VoteTestData.VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual.get(1).getVotes());
     }
