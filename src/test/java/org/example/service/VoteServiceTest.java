@@ -15,22 +15,19 @@ import static org.example.testdata.VoteTestData.*;
 import static org.example.testdata.UserTestData.USER1_ID;
 
 import static org.example.testdata.VoteTestData.VOTE_NOT_FOUND;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VoteServiceTest extends AbstractServiceTest{
 
     @Autowired
     protected VoteService service;
 
-    /*
+
     @Test
     void get() {
         Vote actual = service.get(DATE, USER1_ID);
         VOTE_MATCHER.assertMatch(actual, vote1);
     }
-
-     */
 
     @Test
     void getNotFound() {
@@ -38,37 +35,33 @@ public class VoteServiceTest extends AbstractServiceTest{
     }
 
     @Test
-    void getWithRestaurant() {
-        Vote actual = service.getWithRestaurant(DATE, USER1_ID);
-        VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual, vote1);
-    }
-
-    @Test
     void vote() {
-        service.setTimeLimitForVote(LocalTime.now().plusHours(1));
+        service.setDeadline(LocalTime.now().plusHours(1));
         service.vote(RESTAURANT1_ID, USER1_ID);
-        Vote actual = service.getWithRestaurant(LocalDate.now(), USER1_ID);
+        Vote actual = service.get(LocalDate.now(), USER1_ID);
         int id = actual.getId();
         Vote newVote = getNewWithRestAndUser();
         newVote.setId(id);
-        VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual, newVote);
+        VOTE_MATCHER.assertMatch(actual, newVote);
+        assertEquals(actual.getRestaurant().getId(), RESTAURANT1_ID);
     }
 
     @Test
-    void doubleWithoutExcessTimeLimitVote() {
-        service.setTimeLimitForVote(LocalTime.now().plusHours(1));
+    void doubleWithoutExcessDeadline() {
+        service.setDeadline(LocalTime.now().plusHours(1));
         service.vote(RESTAURANT1_ID, USER1_ID);
         service.vote(RESTAURANT1_ID + 1, USER1_ID);
-        Vote actual = service.getWithRestaurant(LocalDate.now(), USER1_ID);
+        Vote actual = service.get(LocalDate.now(), USER1_ID);
         int id = actual.getId();
         Vote doubleVote = VoteTestData.getUpdated();
         doubleVote.setId(id);
-        VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual, doubleVote);
+        VOTE_MATCHER.assertMatch(actual, doubleVote);
+        assertEquals(actual.getRestaurant().getId(), RESTAURANT1_ID + 1);
     }
 
     @Test
-    void doubleWithExcessTimeLimitVote() {
-        service.setTimeLimitForVote(LocalTime.now().minusHours(1));
+    void doubleWithExcessDeadline() {
+        service.setDeadline(LocalTime.now().minusHours(1));
         assertThrows(IllegalVoteTimeException.class, () -> service.vote(RESTAURANT1_ID, USER1_ID));
     }
 

@@ -32,11 +32,6 @@ public class VoteService {
        return voteRepository.get(date, userId);
     }
 
-    public Vote getWithRestaurant(LocalDate date, int userId) {
-        return voteRepository.getWithRestaurant(date, userId);
-    }
-
-
     public void vote(int restaurantId, int userId) {
         LocalTime votingTime = LocalTime.now();
         boolean isTimeLimit = votingTime.isBefore(deadline);
@@ -65,7 +60,7 @@ public class VoteService {
         checkNotFoundWithId(voteRepository.save(vote), vote.id());
     }
 
-    public void setTimeLimitForVote(LocalTime time) {
+    public void setDeadline(LocalTime time) {
         deadline = time;
     }
 }

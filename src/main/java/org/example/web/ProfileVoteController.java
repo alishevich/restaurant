@@ -6,6 +6,7 @@ import org.example.util.VoteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +26,14 @@ public class ProfileVoteController {
     private VoteService service;
 
     @GetMapping("/with-restaurant")
-    public VoteTo getWithRestaurant(@RequestParam @Nullable LocalDate date) {
+    public VoteTo get(@RequestParam @Nullable LocalDate date) {
         int userId = authUserId();
         log.info("get vote by date {} for user {}", date, userId);
-        return VoteUtil.asTo(service.getWithRestaurant(date, userId));
+        return VoteUtil.asTo(service.get(date, userId));
     }
 
     @PatchMapping("/")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void vote(@RequestParam int restaurantId) {
         int userId = authUserId();
         log.info("vote user {} by  restaurant {}", userId, restaurantId);
