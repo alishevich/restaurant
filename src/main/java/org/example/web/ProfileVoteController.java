@@ -2,6 +2,8 @@ package org.example.web;
 
 import org.example.model.Vote;
 import org.example.service.VoteService;
+import org.example.to.VoteTo;
+import org.example.util.VoteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +26,10 @@ public class ProfileVoteController {
     private VoteService service;
 
     @GetMapping("/with-restaurant")
-    public Vote getWithRestaurant(@RequestParam @Nullable LocalDate date) {
+    public VoteTo getWithRestaurant(@RequestParam @Nullable LocalDate date) {
         int userId = authUserId();
         log.info("get vote by date {} for user {}", date, userId);
-        return service.getWithRestaurant(date, userId);
+        return VoteUtil.asTo(service.getWithRestaurant(date, userId));
     }
 
     @PatchMapping("/")

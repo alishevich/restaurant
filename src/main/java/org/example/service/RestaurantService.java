@@ -39,9 +39,9 @@ public class RestaurantService {
         return restaurantRepository.findAll(SORT_NAME);
     }
 
-    public List<Restaurant> getAllByDate(LocalDate date) {
+    public List<Restaurant> getAllActiveByDate(LocalDate date) {
         LocalDate toDay =  (date != null) ? date : LocalDate.now();
-        return restaurantRepository.getAllByDate(toDay);
+        return restaurantRepository.getAllActiveByDate(toDay);
     }
 
     public Restaurant getWithMenusByDate(int id, LocalDate date) {
@@ -56,7 +56,7 @@ public class RestaurantService {
 
     public List<Restaurant> getAllWithVotes(LocalDate date) {
         LocalDate toDay =  (date != null) ? date : LocalDate.now();
-        List<Restaurant> restaurants = getAllByDate(toDay);
+        List<Restaurant> restaurants = getAllActiveByDate(toDay);
         if (!restaurants.isEmpty()) {
             List<Vote> votes = voteRepository.getAllWithRestaurantByDate(toDay);
             addVotes(restaurants, votes);

@@ -20,10 +20,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     int delete(@Param("id") int id);
 
     @EntityGraph(attributePaths = {"menus"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
-    Restaurant getWithMenus(@Param("id") int id);
-
-    @EntityGraph(attributePaths = {"menus"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r LEFT JOIN r.menus m WHERE r.id=:id AND m.date=:date")
     Restaurant getWithMenusByDate(@Param("id") int id, @Param("date") LocalDate date);
 
@@ -32,6 +28,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     List<Restaurant> getAllWithMenusByDate(@Param("date") LocalDate date);
 
     @Query("SELECT r FROM Restaurant r LEFT JOIN r.menus m WHERE m.date=:date ORDER BY r.name")
-    List<Restaurant> getAllByDate(@Param("date") LocalDate date);
+    List<Restaurant> getAllActiveByDate(@Param("date") LocalDate date);
 
 }

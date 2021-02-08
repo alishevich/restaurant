@@ -2,6 +2,7 @@ package org.example.web;
 
 import org.example.model.Vote;
 import org.example.service.VoteService;
+import org.example.util.VoteUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
@@ -31,7 +32,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
                 .param("userId", String.valueOf(USER1_ID)))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(VOTE_WITH_RESTAURANT_MATCHER.contentJson(vote1));
+                .andExpect(VOTE_TO_MATCHER.contentJson(VoteUtil.asTo(vote1)));
     }
 
     @Test

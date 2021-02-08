@@ -2,6 +2,7 @@ package org.example.testdata;
 
 import org.example.TestMatcher;
 import org.example.model.Vote;
+import org.example.to.VoteTo;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -14,6 +15,7 @@ import static org.example.testdata.UserTestData.user2;
 
 public class VoteTestData {
     public static final TestMatcher<Vote> VOTE_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Vote.class, "restaurant", "user");
+    public static final TestMatcher<VoteTo> VOTE_TO_MATCHER = TestMatcher.usingIgnoringFieldsComparator(VoteTo.class);
     public static TestMatcher<Vote> VOTE_WITH_RESTAURANT_MATCHER =
             TestMatcher.usingAssertions(Vote.class,
                     (a, e) -> assertThat(a).usingRecursiveComparison()
@@ -22,6 +24,7 @@ public class VoteTestData {
                         assertThat(a).usingRecursiveComparison()
                                 .ignoringFields("restaurant.menus", "restaurant.votes",  "user").isEqualTo(e);
                     });
+
 
     public static final int VOTE1_ID = 0;
     public static final LocalDate DATE = LocalDate.of(2021, Month.JANUARY, 25);

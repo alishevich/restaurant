@@ -13,8 +13,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.example.TestUtil.readFromJson;
-import static org.example.testdata.MenuTestData.MENUS_ALL;
-import static org.example.testdata.MenuTestData.MENU_WITH_DISHES_MATCHER;
 import static org.example.testdata.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -45,12 +43,15 @@ class AdminControllerTest extends AbstractControllerTest {
                 .andExpect(USER_MATCHER.contentJson(admin));
     }
 
+    /*
     @Test
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + 10))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
+
+     */
 
     @Test
     void getByEmail() throws Exception {

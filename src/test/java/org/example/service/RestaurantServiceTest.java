@@ -44,7 +44,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void getAllByDate() {
-        List<Restaurant> actual = service.getAllByDate(LocalDate.of(2021, Month.JANUARY, 25));
+        List<Restaurant> actual = service.getAllActiveByDate(LocalDate.of(2021, Month.JANUARY, 25));
         RESTAURANT_MATCHER.assertMatch(actual, restaurant1, restaurant2);
     }
 

@@ -3,6 +3,8 @@ package org.example.testdata;
 import org.example.TestMatcher;
 import org.example.model.Menu;
 import org.example.model.Restaurant;
+import org.example.to.RestaurantTo;
+import org.example.util.RestaurantUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +15,7 @@ import static org.example.testdata.VoteTestData.*;
 
 public class RestaurantTestData {
     public static final TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Restaurant.class, "menus", "votes");
+    public static final TestMatcher<RestaurantTo> RESTAURANT_TO_MATCHER = TestMatcher.usingIgnoringFieldsComparator(RestaurantTo.class);
     public static final TestMatcher<Restaurant> RESTAURANT_WITH_MENUS_MATCHER =
             TestMatcher.usingAssertions(Restaurant.class,
             (a, e) -> assertThat(a).usingRecursiveComparison()
@@ -49,5 +52,14 @@ public class RestaurantTestData {
 
     public static List<Restaurant> getAll() {
         return Arrays.asList(restaurant1, restaurant2);
+    }
+
+    public static List<RestaurantTo> getAllWithVotes() {
+        RestaurantTo restaurantTo1 = RestaurantUtil.createTo(restaurant1);
+        RestaurantTo restaurantTo2 = RestaurantUtil.createTo(restaurant2);
+        restaurantTo1.setVotesCounter(2);
+        restaurantTo2.setVotesCounter(0);
+
+        return Arrays.asList(restaurantTo1, restaurantTo2);
     }
 }

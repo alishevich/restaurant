@@ -7,6 +7,8 @@ public class RestaurantTo extends BaseTo {
     private String phone;
     private int votesCounter;
 
+    public RestaurantTo() {}
+
     public RestaurantTo(Integer id, String name, String address, String phone, int votesCounter) {
         super(id);
         this.name = name;

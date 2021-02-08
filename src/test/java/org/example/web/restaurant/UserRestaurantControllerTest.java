@@ -1,6 +1,8 @@
 package org.example.web.restaurant;
 
 import org.example.model.Restaurant;
+import org.example.testdata.RestaurantTestData;
+import org.example.util.RestaurantUtil;
 import org.example.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -43,11 +45,7 @@ class UserRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(getAll()));
-
-        List<Restaurant> restaurants = readListFromJson(action, Restaurant.class);
-        MENU_WITH_DISHES_MATCHER.assertMatch(restaurants.get(0).getMenus(), menu1);
-        MENU_WITH_DISHES_MATCHER.assertMatch(restaurants.get(1).getMenus(), menu4);
+                .andExpect(RESTAURANT_TO_MATCHER.contentJson(RestaurantTestData.getAllWithVotes()));
     }
 
 
