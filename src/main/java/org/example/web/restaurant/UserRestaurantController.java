@@ -24,7 +24,7 @@ public class UserRestaurantController {
     private RestaurantService service;
 
     @GetMapping("/with-menus")
-    public List<Restaurant> getAllWithMenusByDate(@RequestParam @Nullable LocalDate date) {
+    public List<Restaurant> getAllWithMenus(@RequestParam @Nullable LocalDate date) {
         log.info("getAllWithMenusByDate {}", date);
         return service.getAllWithMenus(date);
     }
@@ -35,9 +35,12 @@ public class UserRestaurantController {
         return RestaurantUtil.getTos(service.getAllWithVotes(date));
     }
 
+    /*
     @GetMapping("/{id}/with-menus")
     public Restaurant getWithMenusByDate(@PathVariable int id, @RequestParam @Nullable LocalDate date) {
         log.info("getWithMenusByDate {}  date {}", id, date);
         return service.getWithMenusByDate(id, date);
     }
+
+     */
 }

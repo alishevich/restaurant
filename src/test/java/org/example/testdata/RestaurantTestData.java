@@ -5,6 +5,7 @@ import org.example.model.Menu;
 import org.example.model.Restaurant;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.testdata.MenuTestData.*;
@@ -44,5 +45,9 @@ public class RestaurantTestData {
         Restaurant updated = new Restaurant(restaurant1);
         updated.setAddress("updatedAddress");
         return updated;
+    }
+
+    public static List<Restaurant> getAll() {
+        return Arrays.asList(restaurant1, restaurant2);
     }
 }
