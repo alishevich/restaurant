@@ -1,6 +1,5 @@
 package org.example.web;
 
-import org.example.model.Vote;
 import org.example.service.VoteService;
 import org.example.to.VoteTo;
 import org.example.util.VoteUtil;

@@ -2,27 +2,23 @@ package org.example.web.restaurant;
 
 import org.example.model.Restaurant;
 import org.example.testdata.RestaurantTestData;
-import org.example.util.RestaurantUtil;
 import org.example.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.servlet.mvc.AbstractController;
 
 import java.util.List;
 
-import static org.example.TestUtil.readFromJson;
 import static org.example.TestUtil.readListFromJson;
 import static org.example.testdata.MenuTestData.*;
 import static org.example.testdata.RestaurantTestData.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class UserRestaurantControllerTest extends AbstractControllerTest {
-    private final String REST_URL = UserRestaurantController.REST_URL + '/';
+class ProfileRestaurantControllerTest extends AbstractControllerTest {
+    private final String REST_URL = ProfileRestaurantController.REST_URL + '/';
 
     @Test
     void getAllWithMenus() throws Exception {
@@ -39,7 +35,7 @@ class UserRestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getAllWithVotes() throws Exception {
+    void getAllWithCountOfVotes() throws Exception {
         ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "with-votes")
                 .param("date", "2021-01-25"))
                 .andExpect(status().isOk())

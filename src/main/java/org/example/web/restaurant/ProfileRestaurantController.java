@@ -15,8 +15,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = UserRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserRestaurantController {
+@RequestMapping(value = ProfileRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class ProfileRestaurantController {
     static final String REST_URL = "/rest/profile/restaurants";
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -30,8 +30,8 @@ public class UserRestaurantController {
     }
 
     @GetMapping("/with-votes")
-    public List<RestaurantTo> getAllWithVotes(@RequestParam @Nullable LocalDate date) {
-        log.info("getAllWithVotes {}", date);
+    public List<RestaurantTo> getAllWithCountOfVotes(@RequestParam @Nullable LocalDate date) {
+        log.info("getAllWithCountOfVotes {}", date);
         return RestaurantUtil.getTos(service.getAllWithVotes(date));
     }
 
