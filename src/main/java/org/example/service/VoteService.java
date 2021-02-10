@@ -6,6 +6,7 @@ import org.example.repository.UserRepository;
 import org.example.repository.VoteRepository;
 import org.example.util.exception.IllegalVoteTimeException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
@@ -32,15 +33,16 @@ public class VoteService {
        return voteRepository.get(date, userId);
     }
 
+    @Transactional
     public void vote(int restaurantId, int userId) {
         LocalTime votingTime = LocalTime.now();
-        boolean isTimeLimit = votingTime.isBefore(deadline);
+        boolean isDeadline = votingTime.isBefore(deadline);
         LocalDate voteDate = LocalDate.now();
         Vote lastVote = get(voteDate, userId);
-        if (isTimeLimit && lastVote == null) {
+        if (isDeadline && lastVote == null) {
             Vote newVote = new Vote(null, voteDate);
             create(newVote, restaurantId, userId);
-        } else if (isTimeLimit) {
+        } else if (isDeadline) {
             update(lastVote, restaurantId);
         } else {
             throw  new IllegalVoteTimeException("The time to change vote has expired");
@@ -57,7 +59,7 @@ public class VoteService {
     public void update(Vote vote, int restaurantId) {
         Assert.notNull(vote, "vote must not be null");
         vote.setRestaurant(restaurantRepository.getOne(restaurantId));
-        checkNotFoundWithId(voteRepository.save(vote), vote.id());
+        voteRepository.save(vote);
     }
 
     public void setDeadline(LocalTime time) {
