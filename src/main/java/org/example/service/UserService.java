@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.model.User;
 import org.example.repository.UserRepository;
+import org.example.to.UserTo;
+import org.example.util.UserUtil;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
@@ -51,7 +53,14 @@ public class UserService {
 
     @CacheEvict(value = "users", allEntries = true)
     public void update(User user) {
-        checkNotFoundWithId(repository.save(user), user.getId());
+        repository.save(user);
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    @Transactional
+    public void update(UserTo userTo) {
+        User user = get(userTo.id());
+        UserUtil.updateFromTo(user, userTo);
     }
 
     @CacheEvict(value = "users", allEntries = true)
