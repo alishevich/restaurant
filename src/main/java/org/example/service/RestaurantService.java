@@ -6,6 +6,7 @@ import org.example.repository.RestaurantRepository;
 import org.example.repository.VoteRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
@@ -54,6 +55,7 @@ public class RestaurantService {
         return restaurantRepository.getAllWithMenusByDate(toDay);
     }
 
+    @Transactional
     public List<Restaurant> getAllWithVotes(LocalDate date) {
         LocalDate toDay =  (date != null) ? date : LocalDate.now();
         List<Restaurant> restaurants = getAllActiveByDate(toDay);
