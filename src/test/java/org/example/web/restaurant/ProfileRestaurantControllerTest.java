@@ -11,8 +11,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 
 import static org.example.TestUtil.readListFromJson;
+import static org.example.TestUtil.userHttpBasic;
 import static org.example.testdata.MenuTestData.*;
 import static org.example.testdata.RestaurantTestData.*;
+import static org.example.testdata.UserTestData.admin;
+import static org.example.testdata.UserTestData.user1;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +26,8 @@ class ProfileRestaurantControllerTest extends AbstractControllerTest {
     @Test
     void getAllWithMenus() throws Exception {
         ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "/with-menus")
-                .param("date", "2021-01-25"))
+                .param("date", "2021-01-25")
+                .with(userHttpBasic(user1)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -36,13 +40,21 @@ class ProfileRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllWithCountOfVotes() throws Exception {
-        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "with-votes")
-                .param("date", "2021-01-25"))
+       perform(MockMvcRequestBuilders.get(REST_URL + "with-votes")
+                .param("date", "2021-01-25")
+                .with(userHttpBasic(admin)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_TO_MATCHER.contentJson(RestaurantTestData.getAllWithVotes()));
     }
+
+    @Test
+    void getUnAuth() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/with-menus"))
+                .andExpect(status().isUnauthorized());
+    }
+
 
 
 }

@@ -1,6 +1,10 @@
 package org.example;
 
+import org.example.model.User;
 import org.example.web.json.JsonUtil;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
@@ -29,7 +33,6 @@ public class TestUtil {
         return JsonUtil.readValues(getContent(result), clazz);
     }
 
-    /*
     public static void mockAuthorize(User user) {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(new AuthorizedUser(user), null, user.getRoles()));
@@ -43,5 +46,4 @@ public class TestUtil {
         return SecurityMockMvcRequestPostProcessors.authentication(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
     }
 
-     */
 }

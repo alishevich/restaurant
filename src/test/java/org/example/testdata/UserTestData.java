@@ -15,9 +15,9 @@ public class UserTestData {
     public static final int USER_NOT_FOUND = 10;
 
 
-    public static final User user1 = new User(USER1_ID, "User1", "user1@yandex.ru", "password1", Role.USER);
-    public static final User user2 = new User(USER1_ID + 1, "User2", "user2@yandex.ru", "password2", Role.USER);
-    public static final User admin = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ADMIN, Role.USER);
+    public static final User user1 = new User(USER1_ID, "User1", "user1@yandex.ru", "{noop}password1", Role.USER);
+    public static final User user2 = new User(USER1_ID + 1, "User2", "user2@yandex.ru", "{noop}password2", Role.USER);
+    public static final User admin = new User(ADMIN_ID, "Admin", "admin@gmail.com", "{noop}admin", Role.ADMIN, Role.USER);
 
     public static User getNew() {
         return new User(null, "New", "new@gmail.com", "newPass", false, new Date(), Collections.singleton(Role.USER));
@@ -28,7 +28,6 @@ public class UserTestData {
         updated.setName("UpdatedName");
         updated.setPassword("newPass");
         updated.setEnabled(false);
-        updated.setRoles(Collections.singletonList(Role.ADMIN));
         return updated;
     }
 }

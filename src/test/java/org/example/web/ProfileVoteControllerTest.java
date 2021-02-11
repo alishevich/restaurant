@@ -8,9 +8,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalTime;
 
+import static org.example.TestUtil.userHttpBasic;
+import static org.example.testdata.MenuTestData.MENU1_ID;
 import static org.example.testdata.RestaurantTestData.RESTAURANT1_ID;
 import static org.example.testdata.UserTestData.USER1_ID;
 
+import static org.example.testdata.UserTestData.user1;
 import static org.example.testdata.VoteTestData.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +27,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "with-restaurant")
+                .with(userHttpBasic(user1))
                 .param("date", "2021-01-25")
                 .param("userId", String.valueOf(USER1_ID)))
                 .andExpect(status().isOk())
@@ -33,11 +37,16 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
 
     @Test
     void vote() throws Exception {
-        service.setDeadline(LocalTime.now().plusHours(1));
-
         perform(MockMvcRequestBuilders.patch(REST_URL)
+                .with(userHttpBasic(user1))
                 .param("restaurantId", String.valueOf(RESTAURANT1_ID)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void getUnAuth() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isUnauthorized());
     }
 }
