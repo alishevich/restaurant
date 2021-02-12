@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static org.example.util.ValidationUtil.checkNotFound;
 import static org.example.util.ValidationUtil.checkNotFoundWithId;
 
 @Service

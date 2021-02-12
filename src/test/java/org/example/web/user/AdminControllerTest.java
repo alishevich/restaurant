@@ -46,15 +46,13 @@ class AdminControllerTest extends AbstractControllerTest {
                 .andExpect(USER_MATCHER.contentJson(admin));
     }
 
-    /*
     @Test
     void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + 10))
+        perform(MockMvcRequestBuilders.get(REST_URL + USER_NOT_FOUND)
+                .with(userHttpBasic(admin)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
-
-     */
 
     @Test
     void getByEmail() throws Exception {
@@ -103,15 +101,13 @@ class AdminControllerTest extends AbstractControllerTest {
         assertThrows(NotFoundException.class, () -> userService.get(USER1_ID));
     }
 
-    /*
     @Test
     void deleteNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + 1))
+        perform(MockMvcRequestBuilders.delete(REST_URL + USER_NOT_FOUND)
+                .with(userHttpBasic(admin)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
-
-     */
 
     @Test
     void update() throws Exception {

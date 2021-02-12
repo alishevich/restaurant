@@ -15,6 +15,7 @@ import static org.example.TestUtil.readFromJson;
 import static org.example.TestUtil.userHttpBasic;
 import static org.example.testdata.MenuTestData.*;
 import static org.example.testdata.RestaurantTestData.RESTAURANT1_ID;
+import static org.example.testdata.RestaurantTestData.RESTAURANT_NOT_FOUND;
 import static org.example.testdata.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -60,6 +61,13 @@ class AdminMenuControllerTest extends AbstractControllerTest{
     }
 
     @Test
+    void getNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + MENU_NOT_FOUND)
+                .with(userHttpBasic(admin)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     void createWithLocation() throws Exception {
         Menu newMenu = getNewWithDishes();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
@@ -82,6 +90,13 @@ class AdminMenuControllerTest extends AbstractControllerTest{
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> service.getWithDishes(MENU1_ID));
+    }
+
+    @Test
+    void deleteNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + MENU_NOT_FOUND)
+                .with(userHttpBasic(admin)))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test

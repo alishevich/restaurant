@@ -1,7 +1,9 @@
 package org.example.web;
 
+import org.example.model.Vote;
 import org.example.service.VoteService;
 import org.example.to.VoteTo;
+import org.example.util.ValidationUtil;
 import org.example.util.VoteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+import static org.example.util.ValidationUtil.checkNotFound;
+import static org.example.util.VoteUtil.asTo;
 import static org.example.web.SecurityUtil.authUserId;
 
 @RestController
@@ -29,7 +33,8 @@ public class ProfileVoteController {
     public VoteTo get(@RequestParam @Nullable LocalDate date) {
         int userId = authUserId();
         log.info("get vote by date {} for user {}", date, userId);
-        return VoteUtil.asTo(service.get(date, userId));
+        return asTo(checkNotFound(service.get(date, userId),
+                "date " + date + " for user " + userId));
     }
 
     @PatchMapping("/")
