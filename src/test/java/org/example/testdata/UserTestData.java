@@ -3,6 +3,7 @@ package org.example.testdata;
 import org.example.TestMatcher;
 import org.example.model.Role;
 import org.example.model.User;
+import org.example.web.json.JsonUtil;
 
 import java.util.Collections;
 import java.util.Date;
@@ -29,5 +30,9 @@ public class UserTestData {
         updated.setPassword("newPass");
         updated.setEnabled(false);
         return updated;
+    }
+
+    public static String jsonWithPassword(User user, String passw) {
+        return JsonUtil.writeAdditionProps(user, "password", passw);
     }
 }
