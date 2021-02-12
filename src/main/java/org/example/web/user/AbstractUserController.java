@@ -36,10 +36,9 @@ public class AbstractUserController {
               return service.get(id);
        }
 
-       public void create(UserTo userTo) {
+       public User create(UserTo userTo) {
               log.info("create from to {}", userTo);
-              checkNew(userTo);
-              create(UserUtil.createNewFromTo(userTo));
+              return create(UserUtil.createNewFromTo(userTo));
        }
 
        public User create(User user) {
