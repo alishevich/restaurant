@@ -1,8 +1,10 @@
 package org.example.web.user;
 
+import org.example.model.Role;
 import org.example.model.User;
 import org.example.service.UserService;
 import org.example.testdata.UserTestData;
+import org.example.util.exception.ErrorType;
 import org.example.util.exception.NotFoundException;
 import org.example.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -17,8 +19,8 @@ import static org.example.testdata.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 class AdminControllerTest extends AbstractControllerTest {
     private static final String REST_URL = AdminController.REST_URL + '/';
@@ -82,7 +84,7 @@ class AdminControllerTest extends AbstractControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(admin))
-                .content(UserTestData.jsonWithPassword(newUser, "newPass")))
+                .content(jsonWithPassword(newUser, "newPass")))
                 .andExpect(status().isCreated());
 
         User created = readFromJson(action, User.class);
@@ -90,6 +92,18 @@ class AdminControllerTest extends AbstractControllerTest {
         newUser.setId(newId);
         USER_MATCHER.assertMatch(created, newUser);
         USER_MATCHER.assertMatch(userService.get(newId), newUser);
+    }
+
+    @Test
+    void createInvalid() throws Exception {
+        User invalid = new User(null, "", "", "newPass", Role.ADMIN, Role.USER);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(jsonWithPassword(invalid, "newPass")))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
     }
 
     @Test
@@ -122,6 +136,19 @@ class AdminControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void updateInvalid() throws Exception {
+        User invalid = new User(user1);
+        invalid.setName("");
+        perform(MockMvcRequestBuilders.put(REST_URL + USER1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(jsonWithPassword(invalid, "password1")))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
+    }
+
+    @Test
     void enable() throws Exception {
         perform(MockMvcRequestBuilders.patch(REST_URL + USER1_ID)
                 .param("enabled", "false")
@@ -132,5 +159,4 @@ class AdminControllerTest extends AbstractControllerTest {
 
         assertFalse(userService.get(USER1_ID).isEnabled());
     }
-
 }

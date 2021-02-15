@@ -1,5 +1,6 @@
 package org.example.web;
 
+import org.example.View;
 import org.example.model.Menu;
 import org.example.service.MenuService;
 import org.example.util.ValidationUtil;
@@ -9,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -39,7 +42,7 @@ public class AdminMenuController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Menu> createWithLocation(@RequestBody Menu menu,
+    public ResponseEntity<Menu> createWithLocation(@Validated(View.Web.class) @RequestBody Menu menu,
                                                    @RequestParam int restaurantId) {
         ValidationUtil.checkNew(menu);
         log.info("create {}", menu);
@@ -61,7 +64,7 @@ public class AdminMenuController {
 
     @PutMapping(value = "/{id}",  consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Menu menu,
+    public void update(@Validated(View.Web.class) @RequestBody Menu menu,
                        @PathVariable int id,
                        @RequestParam int restaurantId) {
         assureIdConsistent(menu, id);

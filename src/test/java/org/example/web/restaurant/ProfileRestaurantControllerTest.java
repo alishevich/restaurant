@@ -54,7 +54,4 @@ class ProfileRestaurantControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL + "/with-menus"))
                 .andExpect(status().isUnauthorized());
     }
-
-
-
 }

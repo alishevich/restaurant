@@ -70,6 +70,7 @@ public class MenuTestData {
     public static Menu getUpdated() {
         Menu updateMenu = new Menu(MENU1_ID, menu1.getDate().plusDays(5));
         updateMenu.setDishes(menu1.getDishes());
+        updateMenu.setRestaurant(menu1.getRestaurant());
         return updateMenu;
     }
 }

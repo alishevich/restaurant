@@ -4,6 +4,7 @@ import org.example.model.User;
 import org.example.service.UserService;
 import org.example.to.UserTo;
 import org.example.util.UserUtil;
+import org.example.util.exception.ErrorType;
 import org.example.util.exception.NotFoundException;
 import org.example.web.AbstractControllerTest;
 import org.example.web.json.JsonUtil;
@@ -21,8 +22,8 @@ import static org.example.testdata.UserTestData.*;
 import static org.example.web.user.ProfileController.REST_URL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 class ProfileControllerTest extends AbstractControllerTest {
 
@@ -62,6 +63,17 @@ class ProfileControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void registerInvalid() throws Exception {
+        UserTo newTo = new UserTo(null, null, null, null);
+        perform(MockMvcRequestBuilders.post(REST_URL + "/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
+    }
+
+    @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL)
                 .with(userHttpBasic(user1)))
@@ -81,5 +93,17 @@ class ProfileControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         USER_MATCHER.assertMatch(userService.get(USER1_ID), UserUtil.updateFromTo(new User(user1), updatedTo));
+    }
+
+    @Test
+    void updateInvalid() throws Exception {
+        UserTo updatedTo = new UserTo(null, null, "password", null);
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(user1))
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
     }
 }

@@ -3,6 +3,7 @@ package org.example.web;
 import org.example.model.Menu;
 import org.example.service.MenuService;
 import org.example.testdata.MenuTestData;
+import org.example.util.exception.ErrorType;
 import org.example.util.exception.NotFoundException;
 import org.example.web.json.JsonUtil;
 import org.junit.jupiter.api.Test;
@@ -15,12 +16,10 @@ import static org.example.TestUtil.readFromJson;
 import static org.example.TestUtil.userHttpBasic;
 import static org.example.testdata.MenuTestData.*;
 import static org.example.testdata.RestaurantTestData.RESTAURANT1_ID;
-import static org.example.testdata.RestaurantTestData.RESTAURANT_NOT_FOUND;
 import static org.example.testdata.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class AdminMenuControllerTest extends AbstractControllerTest{
     private static final String REST_URL = AdminMenuController.REST_URL + '/' ;
@@ -84,6 +83,18 @@ class AdminMenuControllerTest extends AbstractControllerTest{
     }
 
     @Test
+    void createInvalid() throws Exception {
+        Menu invalid = new Menu(null, null);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(JsonUtil.writeValue(invalid)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
+    }
+
+    @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + MENU1_ID)
                 .with(userHttpBasic(admin)))
@@ -107,8 +118,22 @@ class AdminMenuControllerTest extends AbstractControllerTest{
                 .with(userHttpBasic(admin))
                 .content(JsonUtil.writeValue(updated))
                 .param("restaurantId", String.valueOf(RESTAURANT1_ID)))
+                .andDo(print())
                 .andExpect(status().isNoContent());
 
         MENU_WITH_DISHES_MATCHER.assertMatch(service.getWithDishes(MENU1_ID), updated);
+    }
+
+    @Test
+    void updateInvalid() throws Exception {
+        Menu invalid = new Menu(menu1);
+        invalid.setDate(null);
+        perform(MockMvcRequestBuilders.put(REST_URL + MENU1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(JsonUtil.writeValue(invalid)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
     }
 }

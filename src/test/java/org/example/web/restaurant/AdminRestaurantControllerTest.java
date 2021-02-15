@@ -1,8 +1,11 @@
 package org.example.web.restaurant;
 
 import org.example.model.Restaurant;
+import org.example.model.Role;
+import org.example.model.User;
 import org.example.service.RestaurantService;
 import org.example.testdata.RestaurantTestData;
+import org.example.util.exception.ErrorType;
 import org.example.util.exception.NotFoundException;
 import org.example.web.AbstractControllerTest;
 import org.example.web.json.JsonUtil;
@@ -20,8 +23,7 @@ import static org.example.testdata.RestaurantTestData.*;
 import static org.example.testdata.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class AdminRestaurantControllerTest extends AbstractControllerTest {
     private final String REST_URL = AdminRestaurantController.REST_URL + '/';
@@ -102,13 +104,26 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(admin))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
 
         RESTAURANT_MATCHER.assertMatch(service.get(RESTAURANT1_ID), updated);
+    }
+
+    @Test
+    void updateInvalid() throws Exception {
+        Restaurant invalid = new Restaurant(restaurant1);
+        invalid.setName("");
+        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(JsonUtil.writeValue(invalid)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
     }
 
     @Test
@@ -124,5 +139,17 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         newRestaurant.setId(newId);
         RESTAURANT_MATCHER.assertMatch(created, newRestaurant);
         RESTAURANT_MATCHER.assertMatch(service.get(newId), newRestaurant);
+    }
+
+    @Test
+    void createInvalid() throws Exception {
+        Restaurant invalid = new Restaurant(null, "", "", "");
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(JsonUtil.writeValue(invalid)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
     }
 }

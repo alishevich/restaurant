@@ -2,6 +2,7 @@ package org.example.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -22,6 +23,7 @@ public class Restaurant extends AbstractNamedEntity {
     private String phone;
 
     //@JsonIgnore
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private List<Menu> menus;
 

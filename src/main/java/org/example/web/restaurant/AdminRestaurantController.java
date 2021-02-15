@@ -12,9 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.example.util.ValidationUtil.assureIdConsistent;
 
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,15 +53,16 @@ public class AdminRestaurantController {
         service.delete(id);
     }
 
-    @PutMapping
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Restaurant restaurant) {
+    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
+        assureIdConsistent(restaurant, id);
         log.info("update {}", restaurant);
         service.update(restaurant);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
         ValidationUtil.checkNew(restaurant);
         log.info("create {}", restaurant);
         Restaurant created = service.create(restaurant);
