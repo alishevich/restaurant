@@ -4,8 +4,6 @@ import org.example.model.User;
 import org.example.service.UserService;
 import org.example.to.UserTo;
 import org.example.util.UserUtil;
-import org.example.util.exception.ErrorType;
-import org.example.util.exception.NotFoundException;
 import org.example.web.AbstractControllerTest;
 import org.example.web.json.JsonUtil;
 import org.junit.jupiter.api.Test;
@@ -13,14 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
 import static org.example.TestUtil.readFromJson;
 import static org.example.TestUtil.userHttpBasic;
 import static org.example.testdata.UserTestData.*;
+import static org.example.util.exception.ErrorType.VALIDATION_ERROR;
+import static org.example.web.ExceptionInfoHandler.EXCEPTION_DUPLICATE_EMAIL;
 import static org.example.web.user.ProfileController.REST_URL;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -70,7 +71,7 @@ class ProfileControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(newTo)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
+                .andExpect(errorType(VALIDATION_ERROR));
     }
 
     @Test
@@ -104,6 +105,21 @@ class ProfileControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
+                .andExpect(jsonPath("$.type").value(VALIDATION_ERROR.name()));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void updateDuplicate() throws Exception {
+        UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword");
+
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(user1))
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_EMAIL));
     }
 }

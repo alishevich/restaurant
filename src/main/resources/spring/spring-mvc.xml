@@ -34,6 +34,10 @@
         </property>
     </bean>
 
+    <bean class="org.springframework.context.support.MessageSourceAccessor">
+        <constructor-arg ref="messageSource"/>
+    </bean>
+
     <context:component-scan base-package="org.example.web"/>
 
     <mvc:resources mapping="/resources/**" location="/resources/"/>

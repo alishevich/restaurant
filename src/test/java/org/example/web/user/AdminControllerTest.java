@@ -4,7 +4,6 @@ import org.example.model.Role;
 import org.example.model.User;
 import org.example.service.UserService;
 import org.example.testdata.UserTestData;
-import org.example.util.exception.ErrorType;
 import org.example.util.exception.NotFoundException;
 import org.example.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -12,15 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.example.TestUtil.readFromJson;
 import static org.example.TestUtil.userHttpBasic;
 import static org.example.testdata.UserTestData.*;
+import static org.example.util.exception.ErrorType.VALIDATION_ERROR;
+import static org.example.web.ExceptionInfoHandler.EXCEPTION_DUPLICATE_EMAIL;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 class AdminControllerTest extends AbstractControllerTest {
     private static final String REST_URL = AdminController.REST_URL + '/';
@@ -103,7 +105,21 @@ class AdminControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(invalid, "newPass")))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
+                .andExpect(errorType(VALIDATION_ERROR));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void createDuplicate() throws Exception {
+        User expected = new User(null, "New", "user1@yandex.ru", "newPass", Role.USER, Role.ADMIN);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(jsonWithPassword(expected, "newPass")))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_EMAIL));
     }
 
     @Test
@@ -145,7 +161,22 @@ class AdminControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(invalid, "password1")))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()));
+                .andExpect(errorType(VALIDATION_ERROR));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void updateDuplicate() throws Exception {
+        User updated = new User(user1);
+        updated.setEmail("admin@gmail.com");
+        perform(MockMvcRequestBuilders.put(REST_URL + USER1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(jsonWithPassword(updated, "password")))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_EMAIL));
     }
 
     @Test
