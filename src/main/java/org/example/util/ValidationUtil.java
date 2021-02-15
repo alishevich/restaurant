@@ -1,6 +1,7 @@
 package org.example.util;
 
 import org.example.HasId;
+import org.example.util.exception.IllegalRequestDataException;
 import org.example.util.exception.NotFoundException;
 
 public class ValidationUtil {
@@ -26,7 +27,7 @@ public class ValidationUtil {
 
     public static void checkNew(HasId bean) {
         if (!bean.isNew()) {
-            throw new IllegalArgumentException(bean + " must be new (id=null)");
+            throw new IllegalRequestDataException(bean + " must be new (id=null)");
         }
     }
 
@@ -35,7 +36,7 @@ public class ValidationUtil {
         if (bean.isNew()) {
             bean.setId(id);
         } else if (bean.getId() != id) {
-            throw new IllegalArgumentException(bean + " must be with id=" + id);
+            throw new IllegalRequestDataException(bean + " must be with id=" + id);
         }
     }
 
