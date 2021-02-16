@@ -42,7 +42,7 @@ public class AdminMenuController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Menu> createWithLocation(@Validated(View.Web.class) @RequestBody Menu menu,
+    public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody Menu menu,
                                                    @RequestParam int restaurantId) {
         ValidationUtil.checkNew(menu);
         log.info("create {}", menu);
@@ -64,7 +64,7 @@ public class AdminMenuController {
 
     @PutMapping(value = "/{id}",  consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Validated(View.Web.class) @RequestBody Menu menu,
+    public void update(@Valid @RequestBody Menu menu,
                        @PathVariable int id,
                        @RequestParam int restaurantId) {
         assureIdConsistent(menu, id);
