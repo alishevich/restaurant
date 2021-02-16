@@ -1,8 +1,12 @@
 package org.example.util;
 
 import org.example.HasId;
+import org.example.util.exception.ErrorType;
 import org.example.util.exception.IllegalRequestDataException;
 import org.example.util.exception.NotFoundException;
+import org.slf4j.Logger;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class ValidationUtil {
     public static <T> T checkNotFoundWithId(T object, int id) {
@@ -49,5 +53,15 @@ public class ValidationUtil {
             result = cause;
         }
         return result;
+    }
+
+    public static Throwable logAndGetRootCause(Logger log, HttpServletRequest req, Exception e, boolean logStackTrace, ErrorType errorType) {
+        Throwable rootCause = ValidationUtil.getRootCause(e);
+        if (logStackTrace) {
+            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+        } else {
+            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
+        }
+        return rootCause;
     }
 }
