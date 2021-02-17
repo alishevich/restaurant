@@ -34,13 +34,4 @@ public class ProfileRestaurantController {
         log.info("getAllWithCountOfVotes {}", date);
         return RestaurantUtil.getTos(service.getAllWithVotes(date));
     }
-
-    /*
-    @GetMapping("/{id}/with-menus")
-    public Restaurant getWithMenusByDate(@PathVariable int id, @RequestParam @Nullable LocalDate date) {
-        log.info("getWithMenusByDate {}  date {}", id, date);
-        return service.getWithMenusByDate(id, date);
-    }
-
-     */
 }

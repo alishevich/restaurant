@@ -11,13 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
 import javax.validation.ConstraintViolationException;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 import static org.example.testdata.RestaurantTestData.*;
-import static org.example.testdata.VoteTestData.vote1;
-import static org.example.testdata.VoteTestData.vote2;
+import static org.example.testdata.VoteTestData.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RestaurantServiceTest extends AbstractServiceTest {
@@ -44,20 +41,20 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void getAllByDate() {
-        List<Restaurant> actual = service.getAllActiveByDate(LocalDate.of(2021, Month.JANUARY, 25));
+        List<Restaurant> actual = service.getAllActiveByDate(DATE);
         RESTAURANT_MATCHER.assertMatch(actual, restaurant1, restaurant2);
     }
 
     @Test
     void getWithMenusByDate() {
-        Restaurant actual = service.getWithMenusByDate(RESTAURANT1_ID, LocalDate.of(2021, Month.JANUARY, 25));
+        Restaurant actual = service.getWithMenusByDate(RESTAURANT1_ID, DATE);
         RESTAURANT_MATCHER.assertMatch(actual, restaurant1);
         MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.getMenus(), MenuTestData.menu1);
     }
 
     @Test
     void getAllWithMenus() {
-        List<Restaurant> actual = service.getAllWithMenus(LocalDate.of(2021, Month.JANUARY, 25));
+        List<Restaurant> actual = service.getAllWithMenus(DATE);
         RESTAURANT_MATCHER.assertMatch(actual, RestaurantTestData.getAll());
         MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.get(0).getMenus(), MenuTestData.menu1);
         MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.get(1).getMenus(), MenuTestData.menu4);
@@ -65,7 +62,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void getAllWithVotes() {
-        List<Restaurant> actual = service.getAllWithVotes(LocalDate.of(2021, Month.JANUARY, 25));
+        List<Restaurant> actual = service.getAllWithVotes(DATE);
         RESTAURANT_MATCHER.assertMatch(actual, RestaurantTestData.getAll());
         VoteTestData.VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual.get(0).getVotes(), vote1, vote2);
         VoteTestData.VOTE_WITH_RESTAURANT_MATCHER.assertMatch(actual.get(1).getVotes());
@@ -73,9 +70,9 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Restaurant created = service.create(getNew());
+        Restaurant newRestaurant = RestaurantTestData.getNew();
+        Restaurant created = service.create(newRestaurant);
         int newId = created.id();
-        Restaurant newRestaurant = getNew();
         newRestaurant.setId(newId);
         RESTAURANT_MATCHER.assertMatch(created, newRestaurant);
         RESTAURANT_MATCHER.assertMatch(service.get(newId), newRestaurant);
@@ -89,7 +86,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        Restaurant updated = getUpdated();
+        Restaurant updated = RestaurantTestData.getUpdated();
         service.update(updated);
         RESTAURANT_MATCHER.assertMatch(service.get(RESTAURANT1_ID), updated);
     }

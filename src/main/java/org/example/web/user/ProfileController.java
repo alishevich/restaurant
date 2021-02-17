@@ -13,8 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 
-import static org.example.web.SecurityUtil.authUserId;
-
 @RestController
 @RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController extends AbstractUserController {

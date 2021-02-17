@@ -26,8 +26,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "with-restaurant")
                 .with(userHttpBasic(user1))
-                .param("date", "2021-01-25")
-                .param("userId", String.valueOf(USER1_ID)))
+                .param("date", "2021-01-25"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(VOTE_TO_MATCHER.contentJson(VoteUtil.asTo(vote1)));
@@ -37,8 +36,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "with-restaurant")
                 .with(userHttpBasic(user1))
-                .param("date", "2021-01-30")
-                .param("userId", String.valueOf(USER1_ID)))
+                .param("date", "2020-01-25"))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -50,7 +48,6 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
                 .param("restaurantId", String.valueOf(RESTAURANT1_ID)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        service.setDeadline(LocalTime.of(11, 0));
     }
 
     @Test
@@ -58,6 +55,4 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isUnauthorized());
     }
-
-
 }

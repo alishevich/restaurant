@@ -44,7 +44,6 @@ public class VoteServiceTest extends AbstractServiceTest{
         newVote.setId(id);
         VOTE_MATCHER.assertMatch(actual, newVote);
         assertEquals(actual.getRestaurant().getId(), RESTAURANT1_ID);
-        service.setDeadline(LocalTime.of(11, 0));
     }
 
     @Test

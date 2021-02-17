@@ -6,12 +6,12 @@ import org.example.model.Restaurant;
 import org.example.repository.MenuRepository;
 import org.example.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static org.example.util.MenuUtil.addDishes;
 import static org.example.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -41,17 +41,15 @@ public class MenuService {
         checkNotFoundWithId(createWithDishes(menu, restaurantId), menu.getId());
     }
 
+    @Transactional
     public Menu createWithDishes(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");
         List<Dish> dishes = menu.getDishes();
         if (dishes != null && !dishes.isEmpty()) {
-            menu.setDishes(dishes.stream()
-                    .peek(dish -> dish.setMenu(menu))
-                    .collect(Collectors.toList()));
+            addDishes(menu, dishes);
         }
         Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getOne(restaurantId), restaurantId);
         menu.setRestaurant(restaurant);
         return menuRepository.save(menu);
     }
-
 }

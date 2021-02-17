@@ -12,9 +12,6 @@ import org.springframework.util.Assert;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static org.example.util.ValidationUtil.checkNotFound;
-import static org.example.util.ValidationUtil.checkNotFoundWithId;
-
 @Service
 public class VoteService {
     private static LocalTime deadline = LocalTime.of(11, 0);

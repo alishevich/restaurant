@@ -3,6 +3,7 @@ package org.example.testdata;
 import org.example.TestMatcher;
 import org.example.model.Menu;
 
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
@@ -26,15 +27,17 @@ public class MenuTestData {
     public static final int MENU1_ID = 0;
     public static final int MENU_NOT_FOUND = 10;
 
-    public static final Menu menu1 = new Menu(MENU1_ID, of(2021, Month.JANUARY, 25));
-    public static final Menu menu2 = new Menu(MENU1_ID + 1, of(2021, Month.JANUARY, 26));
-    public static final Menu menu3 = new Menu(MENU1_ID + 2, of(2021, Month.JANUARY, 27));
-    public static final Menu menu4 = new Menu(MENU1_ID + 3, of(2021, Month.JANUARY, 25));
-    public static final Menu menu5 = new Menu(MENU1_ID + 4, of(2021, Month.JANUARY, 26));
-    public static final Menu menu6 = new Menu(MENU1_ID + 5, of(2021, Month.JANUARY, 27));
+    public static final LocalDate DATE = LocalDate.of(2021, Month.JANUARY, 25);
+    public static final LocalDate DATE1 = DATE.plusDays(1);
+    public static final LocalDate DATE2 = DATE.plusDays(2);
 
-    public static final List<Menu> MENUS_REST_1 = Arrays.asList(menu1, menu2, menu3);
-    public static final List<Menu> MENUS_REST_2 = Arrays.asList(menu4, menu5, menu6);
+    public static final Menu menu1 = new Menu(MENU1_ID, DATE);
+    public static final Menu menu2 = new Menu(MENU1_ID + 1, DATE1);
+    public static final Menu menu3 = new Menu(MENU1_ID + 2, DATE2);
+    public static final Menu menu4 = new Menu(MENU1_ID + 3, DATE);
+    public static final Menu menu5 = new Menu(MENU1_ID + 4, DATE1);
+    public static final Menu menu6 = new Menu(MENU1_ID + 5, DATE2);
+
     public static final List<Menu> MENUS_ALL = Arrays.asList(menu1, menu2, menu3, menu4, menu5, menu6);
 
     static {

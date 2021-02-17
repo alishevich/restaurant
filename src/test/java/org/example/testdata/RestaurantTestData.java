@@ -16,14 +16,7 @@ import static org.example.testdata.VoteTestData.*;
 public class RestaurantTestData {
     public static final TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Restaurant.class, "menus", "votes");
     public static final TestMatcher<RestaurantTo> RESTAURANT_TO_MATCHER = TestMatcher.usingIgnoringFieldsComparator(RestaurantTo.class);
-    public static final TestMatcher<Restaurant> RESTAURANT_WITH_MENUS_MATCHER =
-            TestMatcher.usingAssertions(Restaurant.class,
-            (a, e) -> assertThat(a).usingRecursiveComparison()
-                    .ignoringFields("menus.dishes.menu", "menus.restaurant",  "votes").isEqualTo(e),
-            (a, e) -> {
-                assertThat(a).usingRecursiveComparison()
-                        .ignoringFields("menus.dishes.menu", "menus.restaurant", "votes").isEqualTo(e);
-            });
+
     public static final int RESTAURANT1_ID = 0;
     public static final int RESTAURANT_NOT_FOUND = 10;
 

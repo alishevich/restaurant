@@ -47,9 +47,6 @@ public class User extends AbstractNamedEntity {
     @BatchSize(size = 200)
     private Set<Role> roles;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Vote> votes;
-
     public User() {}
 
     public User(User u) {
@@ -95,10 +92,6 @@ public class User extends AbstractNamedEntity {
 
     public Date getRegistered() {
         return registered;
-    }
-
-    public void setRegistered(Date registered) {
-        this.registered = registered;
     }
 
     public Set<Role> getRoles() {
