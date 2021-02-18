@@ -5,6 +5,7 @@ import org.example.model.Menu;
 import org.example.model.Restaurant;
 import org.example.repository.MenuRepository;
 import org.example.repository.RestaurantRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -28,6 +29,7 @@ public class MenuService {
        return checkNotFoundWithId(menuRepository.getWithDishes(id), id);
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(int id) {
         checkNotFoundWithId(menuRepository.delete(id) != 0, id);
     }
@@ -36,11 +38,13 @@ public class MenuService {
         return menuRepository.findAll();
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void update(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");
         checkNotFoundWithId(createWithDishes(menu, restaurantId), menu.getId());
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @Transactional
     public Menu createWithDishes(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");

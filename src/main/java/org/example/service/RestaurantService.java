@@ -4,6 +4,8 @@ import org.example.model.Restaurant;
 import org.example.model.Vote;
 import org.example.repository.RestaurantRepository;
 import org.example.repository.VoteRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,7 @@ public class RestaurantService {
         this.voteRepository = voteRepository;
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         return restaurantRepository.save(restaurant);
@@ -36,6 +39,7 @@ public class RestaurantService {
         return checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
     }
 
+    @Cacheable("restaurants")
     public List<Restaurant> getAll() {
         return restaurantRepository.findAll(SORT_NAME);
     }
@@ -50,7 +54,8 @@ public class RestaurantService {
         return checkNotFoundWithId(restaurantRepository.getWithMenusByDate(id, toDay), id);
     }
 
-    public List<Restaurant> getAllWithMenus(LocalDate date) {
+    @Cacheable("restaurants")
+    public List<Restaurant> getAllWithMenusByDate(LocalDate date) {
         LocalDate toDay =  (date != null) ? date : LocalDate.now();
         return restaurantRepository.getAllWithMenusByDate(toDay);
     }
@@ -66,11 +71,13 @@ public class RestaurantService {
         return restaurants;
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         checkNotFoundWithId(restaurantRepository.save(restaurant), restaurant.id());
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(int id) {
         checkNotFoundWithId(restaurantRepository.delete(id) != 0, id);
     }
