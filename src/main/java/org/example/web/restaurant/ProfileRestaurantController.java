@@ -26,7 +26,7 @@ public class ProfileRestaurantController {
     @GetMapping("/with-menus")
     public List<Restaurant> getAllWithMenus(@RequestParam @Nullable LocalDate date) {
         log.info("getAllWithMenusByDate {}", date);
-        return service.getAllWithMenus(date);
+        return service.getAllWithMenusByDate(date);
     }
 
     @GetMapping("/with-votes")

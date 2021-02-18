@@ -54,7 +54,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void getAllWithMenus() {
-        List<Restaurant> actual = service.getAllWithMenus(DATE);
+        List<Restaurant> actual = service.getAllWithMenusByDate(DATE);
         RESTAURANT_MATCHER.assertMatch(actual, RestaurantTestData.getAll());
         MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.get(0).getMenus(), MenuTestData.menu1);
         MenuTestData.MENU_WITH_DISHES_MATCHER.assertMatch(actual.get(1).getMenus(), MenuTestData.menu4);
