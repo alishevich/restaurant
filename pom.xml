@@ -63,6 +63,34 @@
           <argLine>-Dfile.encoding=UTF-8</argLine>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+        <version>1.8.2</version>
+        <configuration>
+          <container>
+            <containerId>tomcat9x</containerId>
+            <systemProperties>
+              <file.encoding>UTF-8</file.encoding>
+              <spring.profiles.active>tomcat</spring.profiles.active>
+            </systemProperties>
+            <dependencies>
+              <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+              </dependency>
+            </dependencies>
+          </container>
+          <deployables>
+            <deployable>
+              <groupId>org.example</groupId>
+              <artifactId>restaurant</artifactId>
+              <type>war</type>
+            </deployable>
+          </deployables>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
