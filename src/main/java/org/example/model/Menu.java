@@ -19,7 +19,7 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private LocalDate date;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu", cascade = CascadeType.ALL)
     @NotNull
     private List<Dish> dishes;
 

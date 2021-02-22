@@ -78,6 +78,9 @@ class AdminMenuControllerTest extends AbstractControllerTest{
         Menu created = readFromJson(action, Menu.class);
         int newId = created.id();
         newMenu.setId(newId);
+        newMenu.getDishes().get(0).setId(created.getDishes().get(0).getId());
+        newMenu.getDishes().get(1).setId(created.getDishes().get(1).getId());
+
         MENU_WITH_DISHES_MATCHER.assertMatch(created, newMenu);
         MENU_WITH_DISHES_MATCHER.assertMatch(service.getWithDishes(newId), newMenu);
     }

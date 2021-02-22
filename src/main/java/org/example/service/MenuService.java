@@ -48,12 +48,12 @@ public class MenuService {
     @Transactional
     public Menu createWithDishes(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");
+        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getOne(restaurantId), restaurantId);
+        menu.setRestaurant(restaurant);
         List<Dish> dishes = menu.getDishes();
         if (dishes != null && !dishes.isEmpty()) {
             addDishes(menu, dishes);
         }
-        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getOne(restaurantId), restaurantId);
-        menu.setRestaurant(restaurant);
         return menuRepository.save(menu);
     }
 }

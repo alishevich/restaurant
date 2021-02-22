@@ -1,7 +1,7 @@
 package org.example.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -22,12 +22,11 @@ public class Restaurant extends AbstractNamedEntity {
             message = "Telephone number should start with country code, then 10 digits")
     private String phone;
 
-    //@JsonIgnore
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private List<Menu> menus;
 
-    //@JsonIgnore
+    @JsonBackReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private List<Vote> votes;
 
