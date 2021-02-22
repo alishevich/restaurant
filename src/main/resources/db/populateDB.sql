@@ -31,10 +31,10 @@ VALUES (0, 0, 1, '2021-01-25'),
 INSERT INTO menu (id, restaurant_id, date)
 VALUES (0, 0, '2021-01-25'),
        (1, 0, '2021-01-26'),
-       (2, 0, '2021-01-27'),
+       (2, 0, now),
        (3, 1, '2021-01-25'),
        (4, 1, '2021-01-26'),
-       (5, 1, '2021-01-27');
+       (5, 1, now);
 
 INSERT INTO  dish(id, menu_id, name, amount)
 VALUES (0, 0, 'dish1', '10'),

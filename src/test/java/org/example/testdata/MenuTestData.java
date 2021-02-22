@@ -29,14 +29,14 @@ public class MenuTestData {
 
     public static final LocalDate DATE = LocalDate.of(2021, Month.JANUARY, 25);
     public static final LocalDate DATE1 = DATE.plusDays(1);
-    public static final LocalDate DATE2 = DATE.plusDays(2);
+    public static final LocalDate DATE_NOW = LocalDate.now();
 
     public static final Menu menu1 = new Menu(MENU1_ID, DATE);
     public static final Menu menu2 = new Menu(MENU1_ID + 1, DATE1);
-    public static final Menu menu3 = new Menu(MENU1_ID + 2, DATE2);
+    public static final Menu menu3 = new Menu(MENU1_ID + 2, DATE_NOW);
     public static final Menu menu4 = new Menu(MENU1_ID + 3, DATE);
     public static final Menu menu5 = new Menu(MENU1_ID + 4, DATE1);
-    public static final Menu menu6 = new Menu(MENU1_ID + 5, DATE2);
+    public static final Menu menu6 = new Menu(MENU1_ID + 5, DATE_NOW);
 
     public static final List<Menu> MENUS_ALL = Arrays.asList(menu1, menu2, menu3, menu4, menu5, menu6);
 
