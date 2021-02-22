@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 public class Dish extends AbstractNamedEntity {
 
     @Column(name = "amount", nullable = false)
-    @Range(min = 1, max = 1000)
+    @Range(min = 0, max = 1000)
     private Integer amount;
 
      @ManyToOne(fetch = FetchType.LAZY)
