@@ -34,17 +34,20 @@ public class VoteTestData {
     public static final Vote vote2 = new Vote(VOTE1_ID + 1, LocalDate.of(2021, Month.JANUARY, 25));
     public static final Vote vote3 = new Vote(VOTE1_ID + 2, LocalDate.of(2021, Month.JANUARY, 26));
     public static final Vote vote4 = new Vote(VOTE1_ID + 3, LocalDate.of(2021, Month.JANUARY, 26));
+    public static final Vote vote5 = new Vote(VOTE1_ID + 4, LocalDate.now());
 
     static {
         vote1.setRestaurant(restaurant1);
         vote2.setRestaurant(restaurant1);
         vote3.setRestaurant(restaurant1);
         vote4.setRestaurant(restaurant2);
+        vote5.setRestaurant(restaurant1);
 
         vote1.setUser(user1);
         vote2.setUser(user2);
         vote3.setUser(user1);
         vote4.setUser(user2);
+        vote5.setUser(user1);
     }
 
     public static Vote getNew() {

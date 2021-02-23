@@ -25,7 +25,8 @@ INSERT INTO vote (id, restaurant_id, user_id, date)
 VALUES (0, 0, 1, '2021-01-25'),
        (1, 0, 2, '2021-01-25'),
        (2, 0, 1, '2021-01-26'),
-       (3, 1, 2, '2021-02-26');
+       (3, 1, 2, '2021-02-26'),
+       (4, 0, 1, now);
 
 
 INSERT INTO menu (id, restaurant_id, date)

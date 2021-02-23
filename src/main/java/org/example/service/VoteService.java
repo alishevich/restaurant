@@ -28,7 +28,8 @@ public class VoteService {
     }
 
     public Vote get(LocalDate date, int userId) {
-       return voteRepository.get(date, userId);
+        LocalDate toDay =  (date != null) ? date : LocalDate.now();
+        return voteRepository.get(toDay, userId);
     }
 
     @Transactional

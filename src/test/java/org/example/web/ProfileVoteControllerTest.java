@@ -33,6 +33,15 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getWithoutDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "with-restaurant")
+                .with(userHttpBasic(user1)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(VOTE_TO_MATCHER.contentJson(VoteUtil.asTo(vote5)));
+    }
+
+    @Test
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "with-restaurant")
                 .with(userHttpBasic(user1))
