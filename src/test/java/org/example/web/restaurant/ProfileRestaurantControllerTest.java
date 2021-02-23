@@ -39,6 +39,20 @@ class ProfileRestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getAllWithMenusWithoutDate() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "/with-menus?date=")
+                .with(userHttpBasic(user1)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(getAll()));
+
+        List<Restaurant> restaurants = readListFromJson(action, Restaurant.class);
+        MENU_WITH_DISHES_MATCHER.assertMatch(restaurants.get(0).getMenus(), menu3);
+        MENU_WITH_DISHES_MATCHER.assertMatch(restaurants.get(1).getMenus(), menu6);
+    }
+
+    @Test
     void getAllWithCountOfVotes() throws Exception {
        perform(MockMvcRequestBuilders.get(REST_URL + "with-votes")
                 .param("date", "2021-01-25")

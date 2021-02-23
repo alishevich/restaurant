@@ -39,7 +39,7 @@ CREATE TABLE vote
     id                 INTEGER IDENTITY,
     restaurant_id      INTEGER       NOT NULL,
     user_id            INTEGER       NOT NULL,
-    date               TIMESTAMP DEFAULT now()   NOT NULL,
+    date               DATE DEFAULT now()   NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE
 );
 CREATE UNIQUE INDEX vote_unique_users_date_idx
@@ -49,7 +49,7 @@ CREATE TABLE menu
 (
     id            INTEGER IDENTITY,
     restaurant_id INTEGER NOT NULL,
-    date          TIMESTAMP DEFAULT now()   NOT NULL,
+    date          DATE DEFAULT now()   NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE,
     CONSTRAINT restaurant_date_idx UNIQUE (restaurant_id, date)
 );
