@@ -33,11 +33,9 @@ git clone https://github.com/alishevich/restaurant.git
 ```
 Deploy:
 ```
-$ mvn clean package
-$ mvn cargo:run
+$ docker build -t restaurant .
+$ docker run -p 8080:8080 restaurant
 ```
-You should have to install JDK 8 and Maven as prerequisite.
-
 ## API
 Swagger documentation will be available at http://localhost:8080/restaurant/swagger-ui.html
 
